@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>My Travels</h2>
+        <br><br>
+        <div *ngFor="let t of travels">
+            <p style="float: left; margin-right: 20px;"><img src="../../../assets/{{t.destination.location.city}}.jpg"
+                    height="150px" width="240px"></p>
+            <div>
+                <h4>{{t.destination.location.city}}</h4>
+                <label>Location: &nbsp;</label>
+                <label>{{t.destination.location.country}}&nbsp;&nbsp;</label>
+                <label>{{t.destination.location.continent}}&nbsp;&nbsp;</label>
+                <label>{{t.destination.location.coordinates.latitude}}&nbsp;&nbsp;</label>
+                <label>{{t.destination.location.coordinates.longitude}}&nbsp;&nbsp;</label>
+                <br>
+                <label>Transportation Type: &nbsp;</label>
+                <label>{{t.transportationType}}&nbsp;&nbsp;</label>
+                <br>
+                <label>Travel Date: &nbsp;</label>
+                <label>{{t.travelDate | date: 'd MMMM, yyyy'}}&nbsp;&nbsp;</label>
+                <br>
+                <label>Grade: &nbsp;</label>
+                <label>{{t.grade | number : '1.0-2'}}&nbsp;&nbsp;</label>
+                <label>Cost: &nbsp;</label>
+                <label>{{t.cost | number : '1.0-0'}}&euro;&nbsp;&nbsp;</label>
+                <button *ngIf="isGreatherThanToday(t.travelDate)" type="button" class="btn btn-danger btn-block mb-4 mx-5" (click)="cancel(t)">Cancel</button>
+                <!-- <button type="button" class="btn btn-primary btn-block mb-4 mx-5" (click)="reserve(d)">Reserve</button> -->
+            </div>
+            <br><br>
+            <hr>
+        </div>
+    </div>
+</body>
+
+</html>

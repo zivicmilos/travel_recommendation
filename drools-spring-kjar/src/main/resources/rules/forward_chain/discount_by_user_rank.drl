@@ -1,0 +1,53 @@
+package rules.forward_chain;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.Travel;
+import travel_recommendation.model.UserRank;
+import java.time.LocalDate;
+import java.util.List;
+
+rule "Discount for platinum users"
+    salience 1
+    agenda-group "discount_by_user_rank"
+    lock-on-active
+    when
+        $u: User(userRank == UserRank.PLATINUM)
+        $d: Destination($u.username == username)
+    then
+        modify($d){setCost($d.getCost()*0.8)}
+end
+
+rule "Discount for gold users"
+    salience 1
+    agenda-group "discount_by_user_rank"
+    lock-on-active
+    when
+        $u: User(userRank == UserRank.GOLD)
+        $d: Destination($u.username == username)
+    then
+        modify($d){setCost($d.getCost()*0.85)}
+end
+
+rule "Discount for silver users"
+    salience 1
+    agenda-group "discount_by_user_rank"
+    lock-on-active
+    when
+        $u: User(userRank == UserRank.SILVER)
+        $d: Destination($u.username == username)
+    then
+        modify($d){setCost($d.getCost()*0.9)}
+end
+
+rule "Discount for bronze users"
+    salience 1
+    agenda-group "discount_by_user_rank"
+    lock-on-active
+    when
+        $u: User(userRank == UserRank.BRONZE)
+        $d: Destination($u.username == username)
+    then
+        modify($d){setCost($d.getCost()*0.95)}
+end

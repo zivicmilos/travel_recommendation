@@ -1,0 +1,36 @@
+package rules.user_activity_rules;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.Travel;
+import travel_recommendation.model.Location;
+import java.util.List;
+
+rule "Discount for prefered travel type"
+    salience 1
+    agenda-group "transportation_related_rules"
+    lock-on-active
+    when
+        $u: User($travelHistory: travels)
+        $d: Destination($u.username == username)
+        List(size >= 5) from collect(Travel(transportationType == $d.recommendedTransportationType) from $travelHistory)
+    then
+        $d.setCost($d.getCost()*0.8);
+end
+
+rule "Higher score for closer destinations if user does not like long trips"
+    salience 1
+    agenda-group "transportation_related_rules"
+    lock-on-active
+    when
+        $u: User($travelHistory: travels, $ul: location)
+        $d: Destination($u.username == username, $dl: location)
+        $avg: Number() from accumulate(
+            Travel($distance: Location.distance(destination.location.getCoordinates(), user.location.getCoordinates())) from $travelHistory,
+            average($distance)
+        )
+        eval($avg <= 1000 && $avg >= Location.distance($dl.getCoordinates(), $ul.getCoordinates()))
+    then
+        modify($d){setScore($d.getScore()+20)}
+end

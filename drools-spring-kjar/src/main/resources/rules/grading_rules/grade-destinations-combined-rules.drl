@@ -1,0 +1,65 @@
+package rules.grading_rules;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.Status;
+import travel_recommendation.model.DestinationType;
+import travel_recommendation.model.Location;
+
+rule "Higher score if weather in user location is matching with destination weather"
+    salience 1
+    agenda-group "grade-destinations-combined-rules"
+    lock-on-active
+    when
+        $d: Destination()
+        $u: User($d.username == username, getUserWeather() == $d.weather)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end
+
+rule "Higher score if destination type is student oriented"
+    salience 1
+    agenda-group "grade-destinations-combined-rules"
+    lock-on-active
+    when
+        $d: Destination(destinationTypes contains DestinationType.PARTY || destinationTypes contains DestinationType.OFFSHORE
+                        || destinationTypes contains DestinationType.ENERGETIC)
+        $u: User(status == Status.STUDENT, $d.username == username)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end
+
+rule "Higher score if destination type is employee oriented"
+    salience 1
+    agenda-group "grade-destinations-combined-rules"
+    lock-on-active
+    when
+        $d: Destination(destinationTypes contains DestinationType.ADVENTUROUS || destinationTypes contains DestinationType.OFFSHORE
+                        || destinationTypes contains DestinationType.EXOTIC || destinationTypes contains DestinationType.ENERGETIC)
+        $u: User(status == Status.EMPLOYED && getAge() < 30, $d.username == username)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end
+
+rule "Higher score if destination type is retiree oriented"
+    salience 1
+    agenda-group "grade-destinations-combined-rules"
+    lock-on-active
+    when
+        $d: Destination(destinationTypes contains DestinationType.HISTORIC || destinationTypes contains DestinationType.RURAL)
+        $u: User(status == Status.RETIRED, $d.username == username)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end
+
+rule "Higher score if destination type is unemployed person oriented"
+    salience 1
+    agenda-group "grade-destinations-combined-rules"
+    lock-on-active
+    when
+        $d: Destination($dl: location)
+        $u: User($d.username == username, status == Status.UNEMPLOYED, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) <= 700)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end

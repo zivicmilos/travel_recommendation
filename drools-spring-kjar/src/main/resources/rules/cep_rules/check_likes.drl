@@ -1,0 +1,157 @@
+package rules.cep_rules;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.Like;
+import travel_recommendation.model.Travel;
+import travel_recommendation.model.DeletedTravel;
+import travel_recommendation.model.LoginFailure;
+import travel_recommendation.model.User;
+
+import java.util.Date;
+
+global java.util.List myGlobalList;
+
+declare SuspiciousLikeEvent
+    @role(event)
+    username: String
+    destination: String
+    reason: String
+end
+
+declare SuspiciousReservationEvent
+    @role(event)
+    username: String
+    destination: String
+    reason: String
+end
+
+declare ReserveCancelEvent
+    @role(event)
+    username: String
+    destination: String
+    reason: String
+end
+
+declare LoginFailureEvent
+    @role(event)
+    username: String
+    reason: String
+end
+
+declare LoginBlockEvent
+    username: String
+end
+
+rule "More than 5 likes in an hour from one user"
+    salience 1
+    agenda-group "check_likes"
+    lock-on-active
+    when
+        $l1: Like($uId: user.username, $dId: destination.location.city)
+        Number(intValue >= 5) from accumulate(
+            $l2: Like(
+                this != $l1,
+                user.username == $uId,
+                destination.location.city == $dId,
+                this meets[1h] $l1
+            ),
+            count($l2)
+        )
+        not(exists(SuspiciousLikeEvent(username == $uId, destination == $dId, reason == "Too many likes for one destination")))
+    then
+        System.out.println("Too many likes for one destination: " + $uId + ", " + $dId);
+        insert(new SuspiciousLikeEvent($uId, $dId, "Too many likes for one destination"));
+        myGlobalList.add( "Too many likes within the hour");
+
+end
+
+rule "More than 3 travel reservations in an hour from one user"
+    salience 1
+    agenda-group "check_likes"
+    lock-on-active
+    when
+        $t1: Travel($uId: user.username, $dId: destination.location.city)
+        Number(intValue >= 2) from accumulate(
+            $t2: Travel(
+                this != $t1,
+                user.username == $uId,
+                destination.location.city == $dId,
+                this meets[5m] $t1
+            ),
+            count($t2)
+        )
+        not(exists(SuspiciousReservationEvent(username == $uId, destination == $dId, reason == "Too many travel reservations for one destination")))
+    then
+        System.out.println("Too many travel reservations for one destination: " + $uId + ", " + $dId);
+        insert(new SuspiciousReservationEvent($uId, $dId, "Too many travel reservations for one destination"));
+        //myGlobalList.add( "Too many travel reservations within the hour");
+
+end
+
+rule "More than 1 reserve and cancel in an hour from one user"
+    salience 1
+    agenda-group "check_likes"
+    lock-on-active
+    when
+        $t1: Travel($uId: user.username, $dId: destination.location.city, $td: travelDate)
+        Number(intValue >= 1) from accumulate(
+            $t2: DeletedTravel(
+                this != $t1,
+                user.username == $uId,
+                destination.location.city == $dId,
+                travelDate == $td,
+                this meets[5m] $t1
+            ),
+            count($t2)
+        )
+        not(exists(ReserveCancelEvent(username == $uId, destination == $dId, reason == "Reserved and canceled more than once")))
+    then
+        System.out.println("Reserved and canceled more than once: " + $uId + ", " + $dId);
+        insert(new ReserveCancelEvent($uId, $dId, "Reserved and canceled more than once"));
+        //myGlobalList.add( "Reserved and canceled more than once");
+
+end
+
+rule "More than 5 failed logins in an hour from one user"
+    salience 1
+    agenda-group "check_likes"
+    lock-on-active
+    when
+        $user: User($u: username)
+        $t1: LoginFailure($uId: user.username, $u == user.username)
+        Number(intValue >= 5) from accumulate(
+            $t2: LoginFailure(
+                this != $t1,
+                user.username == $uId,
+                this meets[5m] $t1
+            ),
+            count($t2)
+        )
+        not(exists(LoginFailureEvent(username == $uId, reason == "Failed to log in more than 5 times")))
+    then
+        System.out.println("Failed to log in more than 5 times: " + $uId);
+        insert(new LoginFailureEvent($uId, "Failed to log in more than 5 times"));
+        modify($user){setLoginBlocked(new Date())}
+        //myGlobalList.add( "Failed to log in more than 5 times");
+end
+
+/*rule "More than 3 failed logins events in an hour from one user"
+    salience 1
+    agenda-group "check_likes"
+    lock-on-active
+    when
+        $user: User($u: username)
+        //LoginFailureEvent($uId: username)
+        //not (LoginBlockEvent(username == $uId))
+        Number(intValue >= 0) from accumulate(
+            $s: LoginFailureEvent(username == $u),
+            count($s)
+        )
+    then
+        //System.out.println("More than 3 failed logins events: " + $uId);
+        //insert(new LoginBlockEvent($uId));
+        modify($user){setLoginBlocked(new Date())}
+        //myGlobalList.add( "Failed to log in more than 5 times");
+end*/

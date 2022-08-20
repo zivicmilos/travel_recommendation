@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Index html</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+	integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+	integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+	crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("form").submit(event=>{
+				event.preventDefault();
+				let f = event.target;
+				$.get("/item?id=" + f.id.value + "&name=" + f.name.value + "&cost=" + f.cost.value + "&salePrice=" + f.salePrice.value,
+					(data, status)=>{
+						console.log(data);
+						console.log(status);
+						$(".jumbotron").append(`<h3>Item klasifikovan kao ${data.category}!</h3>`)
+									   .append(`<p>${JSON.stringify(data)}</p>`);
+					})
+			});
+		});
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<h3>Dodavanje nove činjenice:</h3>
+		</div>
+		<div class="row">
+			
+			<form action="/item" method="get">
+				<div class="form-group">
+					<label for="id">Id:</label> <input type="number"
+						class="form-control" id="id" name="id">
+				</div>
+				<div class="form-group">
+					<label for="name">Name:</label> <input type="text"
+						class="form-control" id="name" name="name">
+				</div>
+				<div class="form-group">
+					<label for="cost">Cost:</label> <input type="number"
+						class="form-control" id="cost" name="cost">
+				</div>
+				<div class="form-group">
+					<label for="salePrice">Sale Price:</label> <input type="number"
+						class="form-control" id="salePrice" name="salePrice">
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+		<div class="row">
+			<div class="jumbotron">
+			  
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travels</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="col-sm">
+            <h2>User: {{currentUser.username}}</h2>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <label>Transportation Type:</label>
+          </div>
+          <div class="col-sm">
+            <label>Budget:</label>
+          </div>
+          <div class="col-sm">
+            <label>Destination Type:</label>
+          </div>
+          <div class="col-sm">
+            <label>Weather:</label>
+          </div>
+          <div class="col-sm">
+            <label>Continent:</label>
+          </div>
+        </div>
+      </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <!--<input name="transportationType" type="text" id="transportationType" [(ngModel)]="transportationType"/>-->
+                <select name="transportationType" id="transportationType" [(ngModel)]="transportationType">
+                    <option value="CAR">Car</option>
+                    <option value="BUS">Bus</option>
+                    <option value="TRAIN">Train</option>
+                    <option value="PLANE">Plane</option>
+                </select>
+            </div>
+            <div class="col-sm">
+                <input name="budget" type="text" id="budget" [(ngModel)]="budget"/>
+            </div>
+            <div class="col-sm">
+                <!--<input name="destinationType" type="text" id="destinationType" [(ngModel)]="destinationType"/>-->
+                <select name="destinationType" id="destinationType" [(ngModel)]="destinationType">
+                    <option value="RURAL">Rural</option>
+                    <option value="URBAN">Urban</option>
+                    <option value="ADVENTUROUS">Adventurous</option>
+                    <option value="PARTY">Party</option>
+                    <option value="EXOTIC">Exotic</option>
+                    <option value="WILD">Wild</option>
+                    <option value="OFFSHORE">Offshore</option>
+                    <option value="ENERGETIC">Energetic</option>
+                    <option value="HISTORIC">Historic</option>
+                </select>
+            </div>
+            <div class="col-sm">
+                <!--<input name="weather" type="text" id="weather" [(ngModel)]="weather"/>-->
+                <select name="weather" id="weather" [(ngModel)]="weather">
+                    <option value="COLD">Cold</option>
+                    <option value="NEUTRAL">Neutral</option>
+                    <option value="WARM">Warm</option>
+                </select>
+            </div>
+            <div class="col-sm">
+                <!--<input name="continent" type="text" id="continent" [(ngModel)]="continent"/>-->
+                <select name="continent" id="continent" [(ngModel)]="continent">
+                    <option value="Africa">Africa</option>
+                    <option value="Asia">Asia</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Europe">Europe</option>
+                    <option value="North America">North America</option>
+                    <option value="South America">South America</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm float-right">
+                <button type="button" class="btn btn-primary btn-block mb-4" (click)="findDestinations()">Find</button>
+                <button type="button" class="btn btn-primary btn-block mb-4 mx-5" (click)="myTravels()">My Travels</button>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="container">
+        <div *ngFor="let d of destinations">
+            <p style="float: left; margin-right: 20px;"><img src="../../../assets/{{d.location.city}}.jpg" height="250px" width="350px"></p>
+            <div>
+            <h4>{{d.location.city}}</h4>
+            <label>Location: &nbsp;</label>
+            <label>{{d.location.country}}&nbsp;&nbsp;</label>
+            <label>{{d.location.continent}}&nbsp;&nbsp;</label>
+            <label>{{d.location.coordinates.latitude}}&nbsp;&nbsp;</label>
+            <label>{{d.location.coordinates.longitude}}&nbsp;&nbsp;</label>
+            <br>
+            <label>Transportation Types: &nbsp;</label>
+            <label *ngFor="let tt of d.transportationTypes">{{tt}}&nbsp;&nbsp;</label>
+            <br>
+            <label>Destination Types: &nbsp;</label>
+            <label *ngFor="let dt of d.destinationTypes">{{dt}}&nbsp;&nbsp;</label>
+            <br>
+            <label>Weather: &nbsp;</label>
+            <label>{{d.weather}}</label>
+            <br>
+            <label>Recommended Transportation Type: &nbsp;</label>
+            <label>{{d.recommendedTransportationType}}</label>
+            <br>
+            <label>Grade: &nbsp;</label>
+            <label>{{d.grade | number : '1.0-2'}}&nbsp;&nbsp;</label>
+            <label>Cost: &nbsp;</label>
+            <label>{{d.cost | number : '1.0-0'}}&euro;&nbsp;&nbsp;</label>
+            <label>Likes: &nbsp;</label>
+            <label>{{d.likes.length}}&nbsp;</label>
+            <button type="button" class="btn btn-primary btn-block mb-4 mx-5" (click)="like(d.location.city)">Like</button>
+            <button type="button" class="btn btn-primary btn-block mb-4 mx-5" (click)="reserve(d)">Reserve</button>
+            <br>
+            <label>Score: &nbsp;</label>
+            <label>{{d.score | number : '1.0-0'}}&nbsp;</label>
+            </div>
+            <hr>
+        </div>
+    </div>
+</body>
+</html>

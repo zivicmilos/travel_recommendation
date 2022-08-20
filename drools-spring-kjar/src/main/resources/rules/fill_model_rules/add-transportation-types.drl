@@ -1,0 +1,31 @@
+package rules.filtering_rules;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.TransportationType;
+
+rule "Add plane as transportation type if continent is not same"
+    salience 100
+    agenda-group "add-transportation-types"
+    lock-on-active
+    when
+        $u : User()
+        $d: Destination($u.username == username, $transportationTypes: transportationTypes, location.continent != $u.location.continent)
+        eval($transportationTypes.empty)
+    then
+        modify($d){addTransportationType(TransportationType.PLANE)}
+end
+
+rule "Add transportation types if continent is same"
+    salience 100
+    agenda-group "add-transportation-types"
+    lock-on-active
+    when
+        $u : User()
+        $d: Destination($u.username == username, $transportationTypes: transportationTypes, location.continent == $u.location.continent)
+        eval($transportationTypes.empty)
+    then
+        modify($d){addTransportationType(TransportationType.CAR), addTransportationType(TransportationType.BUS),
+                   addTransportationType(TransportationType.TRAIN),addTransportationType(TransportationType.PLANE)}
+end

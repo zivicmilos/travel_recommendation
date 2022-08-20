@@ -1,0 +1,89 @@
+package rules.filtering_rules;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.TransportationType;
+import travel_recommendation.model.Location;
+import travel_recommendation.model.Weather;
+
+rule "Higher score if transportation type is matching"
+    salience 10
+    agenda-group "grade-destinations"
+    lock-on-active
+    when
+        $u : User()
+        $d : Destination($u.username == username, transportationTypes contains $u.transportationType)
+    then
+        modify($d){setScore($d.getScore()+20)}
+        modify($d){setRecommendedTransportationType($u.transportationType)}
+        modify($d){setCost($d.costByTransportType($u.transportationType, $u.location))}
+end
+
+rule "Lower score if destination does not have requested transportation type"
+    salience 10
+    agenda-group "grade-destinations"
+    lock-on-active
+    when
+        $u : User()
+        $d : Destination($u.username == username, transportationTypes not contains $u.transportationType)
+    then
+        modify($d){setScore($d.getScore()-30)}
+        modify($d){setRecommendedTransportationType(TransportationType.PLANE)}
+        modify($d){setCost($d.costByTransportType(TransportationType.PLANE, $u.location))}
+end
+
+rule "Higher score if weather is matching"
+    salience 1
+    agenda-group "grade-destinations"
+    lock-on-active
+    when
+        $u : User()
+        $d : Destination($u.username == username, weather == $u.weather)
+    then
+        modify($d){setScore($d.getScore()+20)}
+end
+
+rule "Larger penal if weather is opposite"
+    salience 1
+    agenda-group "grade-destinations"
+    lock-on-active
+    when
+        $d : Destination()
+        $u : User($d.username == username, Math.abs(weather.ordinal() - $d.weather.ordinal()) == 2)
+    then
+        modify($d){setScore($d.getScore()-20)}
+end
+
+rule "Smaller penal if weather is different"
+    salience 1
+    agenda-group "grade-destinations"
+    lock-on-active
+    when
+        $d : Destination()
+        $u : User($d.username == username, Math.abs(weather.ordinal() - $d.weather.ordinal()) == 1)
+    then
+        modify($d){setScore($d.getScore()-10)}
+end
+
+rule "Higher score if destination type is matching"
+    salience 1
+    agenda-group "grade-destinations"
+    lock-on-active
+        when
+            $u : User()
+            $d : Destination($u.username == username, destinationTypes contains $u.destinationType)
+        then
+            modify($d){setScore($d.getScore()+20)}
+end
+
+rule "Higher score if continent is matching"
+    salience 1
+    agenda-group "grade-destinations"
+    lock-on-active
+        when
+            $u : User()
+            $d : Destination($u.username == username, location.continent == $u.continent)
+        then
+            modify($d){setScore($d.getScore()+25)}
+end

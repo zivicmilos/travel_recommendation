@@ -1,0 +1,67 @@
+package rules.user_activity_rules;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.Like;
+import travel_recommendation.model.Travel;
+import java.util.List;
+
+rule "Higher score for popular destinations"
+    salience 1
+    agenda-group "user_activity_rules"
+    lock-on-active
+    when
+        $u: User()
+        $d: Destination($u.username == username, $likes: likes)
+        List(size >= 10) from collect(Like(isLikedToday()) from $likes)
+    then
+        modify($d){setScore($d.getScore()+20)}
+end
+
+rule "Average grade for destinations"
+    salience 1
+    agenda-group "user_activity_rules"
+    lock-on-active
+    when
+        $u: User($travelHistory: travels)
+        $d: Destination($u.username == username)
+        $avg: Number() from accumulate(
+            Travel($grade: grade, destination.location.city == $d.location.city) from $travelHistory,
+            average($grade)
+        )
+    then
+        modify($d){setGrade($avg)}
+end
+
+rule "Average money spent for user"
+    salience 1
+    agenda-group "user_activity_rules"
+    lock-on-active
+    when
+        $u: User($travelHistory: travels)
+        $d: Destination($u.username == username)
+        $avg: Number() from accumulate(
+            Travel($cost: cost) from $travelHistory,
+            average($cost)
+        )
+    then
+        modify($u){setAverageSpent($avg)}
+end
+
+rule "Sum of money spent for user"
+    salience 1
+    agenda-group "user_activity_rules"
+    lock-on-active
+    when
+        $u: User($travelHistory: travels)
+        $d: Destination($u.username == username)
+        $sum: Number() from accumulate(
+            Travel($cost: cost) from $travelHistory,
+            sum($cost)
+        )
+    then
+        modify($u){setSumSpent($sum)}
+end
+
+

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Reservation</h2>
+        <br><br>
+        <p style="float: left; margin-right: 20px;"><img src="../../../assets/{{destination.location.city}}.jpg"
+                height="250px" width="350px"></p>
+        <div>
+            <h4>{{destination.location.city}}</h4>
+            <label>Location: &nbsp;</label>
+            <label>{{destination.location.country}}&nbsp;&nbsp;</label>
+            <label>{{destination.location.continent}}&nbsp;&nbsp;</label>
+            <label>{{destination.location.coordinates.latitude}}&nbsp;&nbsp;</label>
+            <label>{{destination.location.coordinates.longitude}}&nbsp;&nbsp;</label>
+            <br>
+            <label>Transportation Types: &nbsp;</label>
+            <label *ngFor="let tt of destination.transportationTypes">{{tt}}&nbsp;&nbsp;</label>
+            <br>
+            <label>Destination Types: &nbsp;</label>
+            <label *ngFor="let dt of destination.destinationTypes">{{dt}}&nbsp;&nbsp;</label>
+            <br>
+            <label>Weather: &nbsp;</label>
+            <label>{{destination.weather}}</label>
+            <br>
+            <label>Recommended Transportation Type: &nbsp;</label>
+            <label>{{destination.recommendedTransportationType}}</label>
+            <br>
+            <label>Grade: &nbsp;</label>
+            <label>{{destination.grade | number : '1.0-2'}}&nbsp;&nbsp;</label>
+            <label>Cost: &nbsp;</label>
+            <label>{{destination.cost | number : '1.0-0'}}&euro;&nbsp;&nbsp;</label>
+            <label>Likes: &nbsp;</label>
+            <label>{{destination.likes.length}}&nbsp;</label>
+            <br>
+            <label>Score: &nbsp;</label>
+            <label>{{destination.score | number : '1.0-0'}}&nbsp;</label>
+        </div>
+    </div>
+    <br><br><br><br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <label>Travel date</label>
+            </div>
+            <div class="col-sm">
+                <label>Transportation type</label>
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm">
+                <input type="date" name="travelDate" id="travelDate" [(ngModel)]="travelDate">
+            </div>
+            <div class="col-sm">
+                <select name="transportationType" id="transportationType" [(ngModel)]="transportationType">
+                    <option *ngFor="let tt of destination.transportationTypes" 
+                        [value]="tt">
+                        {{tt | titlecase}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-primary btn-block mb-4 mx-5" (click)="reserve()">Reserve</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

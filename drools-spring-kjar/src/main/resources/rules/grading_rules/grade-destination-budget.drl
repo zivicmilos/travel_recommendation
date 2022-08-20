@@ -1,0 +1,158 @@
+package rules.grading_rules;
+dialect  "mvel"
+
+import travel_recommendation.model.User;
+import travel_recommendation.model.Destination;
+import travel_recommendation.model.Location;
+import travel_recommendation.model.TransportationType;
+
+/** Low budget  */
+
+rule "High score if destination is close and budget is low"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) <= 1500, budget <= 600)
+    then
+        modify($d){setScore($d.getScore()+15)}
+end
+
+rule "Low negative score if destination medium far and budget is low"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) > 1500 && Location.distance($dl.getCoordinates(), $ul.getCoordinates()) <= 2500, budget <= 600)
+    then
+        modify($d){setScore($d.getScore()-5)}
+end
+
+rule "Medium negative score if destination is far and budget is low"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) > 2500, budget <= 600)
+    then
+        modify($d){setScore($d.getScore()-10)}
+end
+
+/** Medium high budget  */
+
+rule "Medium score if destination is close and budget is medium high"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) <= 1500, budget > 600 && budget <= 1200)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end
+
+rule "High score if destination is medium far and budget is medium high"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) > 1500 && Location.distance($dl.getCoordinates(), $ul.getCoordinates()) <= 2500, budget > 600 && budget <= 1200)
+    then
+        modify($d){setScore($d.getScore()+15)}
+end
+
+rule "Low negative score if destination is far and budget is medium high"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) > 2500, budget > 600 && budget <= 1200)
+    then
+        modify($d){setScore($d.getScore()-5)}
+end
+
+/** High budget  */
+
+rule "High score if destination is far and budget is high"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) > 2500, budget > 1200)
+    then
+        modify($d){setScore($d.getScore()+15)}
+end
+
+rule "Medium score if destination is medium far and budget is high"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) > 1500 && Location.distance($dl.getCoordinates(), $ul.getCoordinates()) <= 2500, budget > 1200)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end
+
+rule "Low score if destination is close and budget is high"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $d : Destination($dl : location)
+        $u : User($d.username == username, $ul : location, Location.distance($dl.getCoordinates(), $ul.getCoordinates()) <= 1500, budget > 1200)
+    then
+        modify($d){setScore($d.getScore()+5)}
+end
+
+/** Budget and cost */
+
+rule "High score if budget is enough and transportation type exists"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $u : User()
+        $d : Destination($u.username == username, transportationTypes contains $u.transportationType, costByTransportType($u.transportationType, $u.location) <= $u.budget)
+    then
+        modify($d){setScore($d.getScore()+15)}
+end
+
+rule "Medium score if budget is enough and transportation type not exists"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $u : User()
+        $d : Destination($u.username == username, transportationTypes not contains $u.transportationType, costByTransportType(TransportationType.PLANE, $u.location) <= $u.budget)
+    then
+        modify($d){setScore($d.getScore()+10)}
+end
+
+rule "High negative score if budget is not enough and transportation type not exists"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $u : User()
+        $d : Destination($u.username == username, transportationTypes not contains $u.transportationType, costByTransportType($u.transportationType, $u.location) > $u.budget)
+    then
+        modify($d){setScore($d.getScore()-15)}
+end
+
+rule "Medium negative score if budget is not enough and transportation type exists"
+    salience 1
+    agenda-group "grade-destinations-budget"
+    lock-on-active
+    when
+        $u : User()
+        $d : Destination($u.username == username, transportationTypes contains $u.transportationType, costByTransportType(TransportationType.PLANE, $u.location) > $u.budget)
+    then
+        modify($d){setScore($d.getScore()-10)}
+end

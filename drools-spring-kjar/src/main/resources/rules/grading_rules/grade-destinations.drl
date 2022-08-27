@@ -13,11 +13,11 @@ rule "Higher score if transportation type is matching"
     lock-on-active
     when
         $u : User()
-        $d : Destination($u.username == username, transportationTypes contains $u.transportationType)
+        $d : Destination($u.username == username, transportationTypes contains $u.userParameters.transportationType)
     then
         modify($d){setScore($d.getScore()+20)}
-        modify($d){setRecommendedTransportationType($u.transportationType)}
-        modify($d){setCost($d.costByTransportType($u.transportationType, $u.location))}
+        modify($d){setRecommendedTransportationType($u.userParameters.transportationType)}
+        modify($d){setCost($d.costByTransportType($u.userParameters.transportationType, $u.location))}
 end
 
 rule "Lower score if destination does not have requested transportation type"
@@ -26,7 +26,7 @@ rule "Lower score if destination does not have requested transportation type"
     lock-on-active
     when
         $u : User()
-        $d : Destination($u.username == username, transportationTypes not contains $u.transportationType)
+        $d : Destination($u.username == username, transportationTypes not contains $u.userParameters.transportationType)
     then
         modify($d){setScore($d.getScore()-30)}
         modify($d){setRecommendedTransportationType(TransportationType.PLANE)}
@@ -39,7 +39,7 @@ rule "Higher score if weather is matching"
     lock-on-active
     when
         $u : User()
-        $d : Destination($u.username == username, weather == $u.weather)
+        $d : Destination($u.username == username, weather == $u.userParameters.weather)
     then
         modify($d){setScore($d.getScore()+20)}
 end
@@ -50,7 +50,7 @@ rule "Larger penal if weather is opposite"
     lock-on-active
     when
         $d : Destination()
-        $u : User($d.username == username, Math.abs(weather.ordinal() - $d.weather.ordinal()) == 2)
+        $u : User($d.username == username, Math.abs(userParameters.weather.ordinal() - $d.weather.ordinal()) == 2)
     then
         modify($d){setScore($d.getScore()-20)}
 end
@@ -61,7 +61,7 @@ rule "Smaller penal if weather is different"
     lock-on-active
     when
         $d : Destination()
-        $u : User($d.username == username, Math.abs(weather.ordinal() - $d.weather.ordinal()) == 1)
+        $u : User($d.username == username, Math.abs(userParameters.weather.ordinal() - $d.weather.ordinal()) == 1)
     then
         modify($d){setScore($d.getScore()-10)}
 end
@@ -72,7 +72,7 @@ rule "Higher score if destination type is matching"
     lock-on-active
         when
             $u : User()
-            $d : Destination($u.username == username, destinationTypes contains $u.destinationType)
+            $d : Destination($u.username == username, destinationTypes contains $u.userParameters.destinationType)
         then
             modify($d){setScore($d.getScore()+20)}
 end
@@ -83,7 +83,7 @@ rule "Higher score if continent is matching"
     lock-on-active
         when
             $u : User()
-            $d : Destination($u.username == username, location.continent == $u.continent)
+            $d : Destination($u.username == username, location.continent == $u.userParameters.continent)
         then
             modify($d){setScore($d.getScore()+25)}
 end

@@ -1,21 +1,49 @@
 package travel_recommendation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 import org.kie.api.definition.type.Timestamp;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "travels")
 @Role(Role.Type.EVENT)
 @Expires("2h30m")
 public class Travel {
-    @JsonBackReference
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"travels"})
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "destination_id")
     private Destination destination;
+
+    @Column(name = "travel_date")
     private LocalDate travelDate;
+
+    @Column(name = "transportation_type")
     private TransportationType transportationType;
+
+    @Column(name = "grade")
     private int grade;
+
+    @Column(name = "cost")
     private double cost;
 
     public Travel(User user, Destination destination, LocalDate travelDate, TransportationType transportationType, int grade, int cost) {
@@ -27,51 +55,4 @@ public class Travel {
         this.cost = cost;
     }
 
-    public Destination getDestination() {
-        return destination;
-    }
-
-    public void setDestination(Destination destination) {
-        this.destination = destination;
-    }
-
-    public LocalDate getTravelDate() {
-        return travelDate;
-    }
-
-    public void setTravelDate(LocalDate travelDate) {
-        this.travelDate = travelDate;
-    }
-
-    public TransportationType getTransportationType() {
-        return transportationType;
-    }
-
-    public void setTransportationType(TransportationType transportationType) {
-        this.transportationType = transportationType;
-    }
-
-    public int getGrade() {
-        return grade;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

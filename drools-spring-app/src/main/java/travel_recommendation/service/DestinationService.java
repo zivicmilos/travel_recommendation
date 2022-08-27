@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import travel_recommendation.dto.LikeDto;
 import travel_recommendation.model.*;
-import travel_recommendation.repository.Repository;
+import travel_recommendation.repository.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,37 +20,42 @@ import java.util.List;
 public class DestinationService {
 
     private static Logger log = LoggerFactory.getLogger(DestinationService.class);
-    private final Repository repository;
+    private final DestinationRepository destinationRepository;
+    private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
+    private final TravelRepository travelRepository;
     private final KieContainer kieContainer;
     private List<String> list = new ArrayList<>();
     private List<DeletedTravel> deletedTravels = new ArrayList<>();
     private List<LoginFailure> loginFailures = new ArrayList<>();
 
     @Autowired
-    public DestinationService(KieContainer kieContainer, Repository repository) {
+    public DestinationService(KieContainer kieContainer, DestinationRepository destinationRepository,
+                              UserRepository userRepository, LikeRepository likeRepository, TravelRepository travelRepository) {
         log.info("Initialising a new session.");
         this.kieContainer = kieContainer;
-        this.repository = repository;
+        this.destinationRepository = destinationRepository;
+        this.userRepository = userRepository;
+        this.likeRepository = likeRepository;
+        this.travelRepository = travelRepository;
     }
 
     public List<Destination> getDestinationList(String username, TransportationType transportationType, double budget,
                                                 DestinationType destinationType, Weather weather, String continent) {
         KieSession kieSession = kieContainer.newKieSession();
-        repository.initRepository();
 
-        List<User> users = repository.getUsers();
+        List<User> users = userRepository.findAll();
         for (User user : users) {
             if (user.getUsername().equals(username)) {
-                user.setBudget(budget);
-                user.setTransportationType(transportationType);
-                user.setDestinationType(destinationType);
-                user.setWeather(weather);
-                user.setContinent(continent);
+                user.setUserParameters(new UserParameters(transportationType, destinationType, weather, continent, budget));
+            }
+            else {
+                user.setUserParameters(new UserParameters());
             }
             kieSession.insert(user);
         }
 
-        List<Destination> destinations = repository.getDestinations();
+        List<Destination> destinations = destinationRepository.findAll();
         for (Destination d : destinations) {
             d.setUsername(username);
             kieSession.insert(d);
@@ -81,24 +86,24 @@ public class DestinationService {
 
     public String like(LikeDto like) {
         list = new ArrayList<>();
-        Destination d = repository.getDestinationByName(like.getDestination());
-        d.addLike(new Like(repository.getUserByUsername(like.getUser()), d, like.getTime()));
+        Destination d = destinationRepository.findByCity(like.getDestination());
+        Like newLike = likeRepository.save(new Like(userRepository.findByUsername(like.getUser()), d, like.getTime()));
 
         cepRules();
 
         if (!list.isEmpty() && list.get(0).equals("Too many likes within the hour")) {
-            d.getLikes().remove(d.getLikes().size() - 1);
+            likeRepository.deleteById((newLike.getId()));
             return list.get(0);
         }
         return "Ok";
     }
 
     public void reserve(Travel travel) {
-        travel.setUser(repository.getUserByUsername(travel.getUser().getUsername()));
-        travel.setDestination(repository.getDestinationByName(travel.getDestination().getLocation().getCity()));
+        travel.setUser(userRepository.findById(travel.getUser().getId()).get());
+        travel.setDestination(destinationRepository.findById(travel.getDestination().getId()).get());
         travel.setCost(travel.getDestination().costByTransportType(travel.getTransportationType(), travel.getUser().getLocation()));
 
-        repository.getUserByUsername(travel.getUser().getUsername()).addTravel(travel);
+        travelRepository.save(travel);
 
         cepRules();
     }
@@ -106,20 +111,16 @@ public class DestinationService {
     public void cepRules() {
         KieSession kieSession = kieContainer.newKieSession();
 
-        for (User u : repository.getUsers()) {
+        for (User u : userRepository.findAll()) {
             kieSession.insert(u);
         }
 
-        for (Destination des : repository.getDestinations()) {
-            for (Like l : des.getLikes()) {
-                kieSession.insert(l);
-            }
+        for (Like l : likeRepository.findAll()) {
+            kieSession.insert(l);
         }
 
-        for (User u : repository.getUsers()) {
-            for (Travel t : u.getTravels()) {
-                kieSession.insert(t);
-            }
+        for (Travel t : travelRepository.findAll()) {
+            kieSession.insert(t);
         }
 
         for (DeletedTravel dt : this.deletedTravels) {

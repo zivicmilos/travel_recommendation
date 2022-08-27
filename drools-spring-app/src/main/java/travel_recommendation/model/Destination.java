@@ -1,22 +1,57 @@
 package travel_recommendation.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "destinations")
 public class Destination {
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private Weather weather;
-    private List<DestinationType> destinationTypes;
-    private Location location;
-    private List<TransportationType> transportationTypes;
-    private List<Like> likes;
-    private String username;
-    private double score;
-    private TransportationType recommendedTransportationType;
-    private double cost;
-    private double grade;
 
-    public Destination() {
-    }
+    @ElementCollection(targetClass = DestinationType.class)
+    @CollectionTable(name = "destination_types", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "destination_type", nullable = false)
+    private List<DestinationType> destinationTypes;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
+
+    @ElementCollection(targetClass = TransportationType.class)
+    @CollectionTable(name = "transportation_types", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "transportation_type", nullable = false)
+    private List<TransportationType> transportationTypes;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "destination")
+    private List<Like> likes;
+
+    @Transient
+    private String username;
+
+    @Transient
+    private double score;
+
+    @Transient
+    private TransportationType recommendedTransportationType;
+
+    @Transient
+    private double cost;
+
+    @Transient
+    private double grade;
 
     public Destination(Weather weather, List<DestinationType> destinationTypes, Location location, List<TransportationType> transportationTypes) {
         this.weather = weather;
@@ -31,48 +66,12 @@ public class Destination {
         this.grade = 0;
     }
 
-    public Weather getWeather() {
-        return weather;
-    }
-
-    public void setWeather(Weather weather) {
-        this.weather = weather;
-    }
-
-    public List<DestinationType> getDestinationTypes() {
-        return destinationTypes;
-    }
-
-    public void setDestinationTypes(List<DestinationType> destinationTypes) {
-        this.destinationTypes = destinationTypes;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public List<TransportationType> getTransportationTypes() {
-        return transportationTypes;
-    }
-
-    public void setTransportationTypes(List<TransportationType> transportationTypes) {
-        this.transportationTypes = transportationTypes;
-    }
-
     public void addTransportationType(TransportationType transportationType) {
         this.transportationTypes.add(transportationType);
     }
 
-    public double getScore() {
-        return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
+    public void addLike(Like like) {
+        this.likes.add(like);
     }
 
     public double costByTransportType(TransportationType transportationType, Location userLocation) {
@@ -92,47 +91,4 @@ public class Destination {
         }
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public List<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Like> likes) {
-        this.likes = likes;
-    }
-
-    public void addLike(Like like) {
-        this.likes.add(like);
-    }
-
-    public TransportationType getRecommendedTransportationType() {
-        return recommendedTransportationType;
-    }
-
-    public void setRecommendedTransportationType(TransportationType recommendedTransportationType) {
-        this.recommendedTransportationType = recommendedTransportationType;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public double getGrade() {
-        return grade;
-    }
-
-    public void setGrade(double grade) {
-        this.grade = grade;
-    }
 }

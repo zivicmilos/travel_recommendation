@@ -1,50 +1,39 @@
 package travel_recommendation.model;
 
-public class Location {
-    private String city;
-    private String country;
-    private String continent;
-    private Coordinates coordinates;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public Location() {
-    }
+import javax.persistence.*;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "locations")
+public class Location {
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "continent")
+    private String continent;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "coordinates_id", referencedColumnName = "id")
+    private Coordinates coordinates;
 
     public Location(String city, String country, String continent, Coordinates coordinates) {
         this.city = city;
         this.country = country;
         this.continent = continent;
-        this.coordinates = coordinates;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getContinent() {
-        return continent;
-    }
-
-    public void setContinent(String continent) {
-        this.continent = continent;
-    }
-
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 

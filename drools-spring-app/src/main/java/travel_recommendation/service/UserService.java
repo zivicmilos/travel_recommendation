@@ -3,28 +3,37 @@ package travel_recommendation.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import travel_recommendation.model.*;
-import travel_recommendation.repository.Repository;
+import travel_recommendation.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
-    private final Repository repository;
+    //private final Repository repository;
+
+    private final DestinationRepository destinationRepository;
+    private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
+    private final TravelRepository travelRepository;
     private final DestinationService destinationService;
 
     @Autowired
-    public UserService(Repository repository, DestinationService destinationService) {
-        this.repository = repository;
+    public UserService(DestinationRepository destinationRepository, UserRepository userRepository,
+                       LikeRepository likeRepository, TravelRepository travelRepository, DestinationService destinationService) {
         this.destinationService = destinationService;
+        this.destinationRepository = destinationRepository;
+        this.userRepository = userRepository;
+        this.likeRepository = likeRepository;
+        this.travelRepository = travelRepository;
     }
 
     public List<User> getUsers() {
-        return repository.getUsers();
+        return userRepository.findAll();
     }
 
     public Object login(User user) {
-        List<User> users = repository.getUsers();
+        List<User> users = userRepository.findAll();
         User retVal = users.stream().filter(u->u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())).findFirst().orElse(null);
         if (retVal != null) {
             return retVal;
@@ -40,14 +49,13 @@ public class UserService {
     }
 
     public List<Travel> getTravelsByUsername(String username) {
-        return repository.getUserByUsername(username).getTravels();
+        return travelRepository.findByUsername(username);
     }
 
     public void cancelTravel(Travel travel) {
-        List<Travel> travels = repository.getUserByUsername(travel.getDestination().getUsername()).getTravels();
-        travels.removeIf(t -> t.getDestination().getLocation().getCity().equals(travel.getDestination().getLocation().getCity()) && t.getTravelDate().equals(travel.getTravelDate()));
+        travelRepository.deleteById(travel.getId());
 
-        destinationService.addDeletedTravel(new DeletedTravel( repository.getUserByUsername(travel.getDestination().getUsername()), travel.getDestination(), travel.getTravelDate()));
+        destinationService.addDeletedTravel(new DeletedTravel(travel.getUser(), travel.getDestination(), travel.getTravelDate()));
         destinationService.cepRules();
     }
 }

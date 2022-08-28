@@ -19,8 +19,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DestinationServiceImpl implements DestinationService {
-
-    //private static Logger log = LoggerFactory.getLogger(DestinationServiceImpl.class);
     private final DestinationRepository destinationRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;

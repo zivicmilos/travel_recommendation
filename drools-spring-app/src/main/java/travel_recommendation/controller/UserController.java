@@ -15,8 +15,6 @@ import java.util.List;
 @RequestMapping(value = "/user")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class UserController {
-    //private static Logger log = LoggerFactory.getLogger(UserController.class);
-
     private final UserService userService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")

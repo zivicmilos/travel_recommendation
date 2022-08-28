@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   destinationType: String = 'PARTY';
   weather: String = "WARM";
   continent: String = 'Europe';
-  destinations : Destination[] = []
+  destinations : Destination[] = [];
   constructor(private destinationService: DestinationService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {

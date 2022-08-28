@@ -18,8 +18,6 @@ import java.util.List;
 @RequestMapping(value = "/destination")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class DestinationController {
-    //private static Logger log = LoggerFactory.getLogger(DestinationController.class);
-
     private final DestinationService destinationService;
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")

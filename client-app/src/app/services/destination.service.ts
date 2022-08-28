@@ -7,20 +7,20 @@ import { Travel } from '../model/travel-model';
   providedIn: 'root'
 })
 export class DestinationService {
-  baseUrl: String = 'http://localhost:8080/';
+  baseUrl: String = 'http://localhost:8080/destination';
 
   constructor(private http: HttpClient) { }
 
   findDestinations(username: String, transportationType: String, budget: Number, destinationType: String, 
     weather: String, continent: String) {
-    return this.http.get(this.baseUrl + 'destination?username='+username+'&transportationType='+transportationType+
+    return this.http.get(this.baseUrl + '?username='+username+'&transportationType='+transportationType+
     '&budget='+budget+'&destinationType='+destinationType+'&weather='+weather+'&continent='+continent);
   }
 
   like(like: Like) {
-    return this.http.post(this.baseUrl + 'like', like);
+    return this.http.post(this.baseUrl + '/like', like);
   }
   reserve(travel: Travel) {
-    return this.http.post(this.baseUrl + 'reservation', travel);
+    return this.http.post(this.baseUrl + '/reservation', travel);
   }
 }

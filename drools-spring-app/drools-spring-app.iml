@@ -109,7 +109,7 @@
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.3.20" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.3.20" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.postgresql:postgresql:42.3.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.postgresql:postgresql:42.4.2" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.checkerframework:checker-qual:3.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.jayway.jsonpath:json-path:2.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.minidev:json-smart:2.4.8" level="project" />

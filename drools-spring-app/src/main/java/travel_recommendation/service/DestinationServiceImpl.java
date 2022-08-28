@@ -1,25 +1,23 @@
 package travel_recommendation.service;
 
-import org.apache.juli.logging.Log;
+import lombok.RequiredArgsConstructor;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import travel_recommendation.dto.LikeDto;
 import travel_recommendation.model.*;
 import travel_recommendation.repository.*;
+import travel_recommendation.service.interfaces.DestinationService;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 @Service
-public class DestinationService {
+@RequiredArgsConstructor
+public class DestinationServiceImpl implements DestinationService {
 
-    private static Logger log = LoggerFactory.getLogger(DestinationService.class);
+    //private static Logger log = LoggerFactory.getLogger(DestinationServiceImpl.class);
     private final DestinationRepository destinationRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
@@ -29,17 +27,7 @@ public class DestinationService {
     private List<DeletedTravel> deletedTravels = new ArrayList<>();
     private List<LoginFailure> loginFailures = new ArrayList<>();
 
-    @Autowired
-    public DestinationService(KieContainer kieContainer, DestinationRepository destinationRepository,
-                              UserRepository userRepository, LikeRepository likeRepository, TravelRepository travelRepository) {
-        log.info("Initialising a new session.");
-        this.kieContainer = kieContainer;
-        this.destinationRepository = destinationRepository;
-        this.userRepository = userRepository;
-        this.likeRepository = likeRepository;
-        this.travelRepository = travelRepository;
-    }
-
+    @Override
     public List<Destination> getDestinationList(String username, TransportationType transportationType, double budget,
                                                 DestinationType destinationType, Weather weather, String continent) {
         KieSession kieSession = kieContainer.newKieSession();
@@ -84,6 +72,7 @@ public class DestinationService {
         return destinations;
     }
 
+    @Override
     public String like(LikeDto like) {
         list = new ArrayList<>();
         Destination d = destinationRepository.findByCity(like.getDestination());
@@ -98,9 +87,10 @@ public class DestinationService {
         return "Ok";
     }
 
+    @Override
     public void reserve(Travel travel) {
-        travel.setUser(userRepository.findById(travel.getUser().getId()).get());
-        travel.setDestination(destinationRepository.findById(travel.getDestination().getId()).get());
+        travel.setUser(userRepository.findById(travel.getUser().getId()).orElse(null));
+        travel.setDestination(destinationRepository.findById(travel.getDestination().getId()).orElse(null));
         travel.setCost(travel.getDestination().costByTransportType(travel.getTransportationType(), travel.getUser().getLocation()));
 
         travelRepository.save(travel);
@@ -108,6 +98,7 @@ public class DestinationService {
         cepRules();
     }
 
+    @Override
     public void cepRules() {
         KieSession kieSession = kieContainer.newKieSession();
 

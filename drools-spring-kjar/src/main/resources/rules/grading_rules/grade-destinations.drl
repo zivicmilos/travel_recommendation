@@ -3,9 +3,9 @@ dialect  "mvel"
 
 import travel_recommendation.model.User;
 import travel_recommendation.model.Destination;
-import travel_recommendation.model.TransportationType;
+import travel_recommendation.model.enums.TransportationType;
 import travel_recommendation.model.Location;
-import travel_recommendation.model.Weather;
+import travel_recommendation.model.enums.Weather;
 
 rule "Higher score if transportation type is matching"
     salience 10

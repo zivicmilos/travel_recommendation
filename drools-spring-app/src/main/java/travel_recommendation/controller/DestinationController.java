@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import travel_recommendation.dto.LikeDto;
 import travel_recommendation.model.*;
+import travel_recommendation.model.enums.DestinationType;
+import travel_recommendation.model.enums.TransportationType;
+import travel_recommendation.model.enums.Weather;
 import travel_recommendation.service.interfaces.DestinationService;
 
 import java.util.List;

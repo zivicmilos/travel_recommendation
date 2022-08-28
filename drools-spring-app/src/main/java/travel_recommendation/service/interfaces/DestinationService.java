@@ -2,6 +2,9 @@ package travel_recommendation.service.interfaces;
 
 import travel_recommendation.dto.LikeDto;
 import travel_recommendation.model.*;
+import travel_recommendation.model.enums.DestinationType;
+import travel_recommendation.model.enums.TransportationType;
+import travel_recommendation.model.enums.Weather;
 
 import java.util.List;
 

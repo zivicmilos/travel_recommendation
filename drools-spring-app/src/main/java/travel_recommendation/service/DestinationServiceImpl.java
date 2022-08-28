@@ -6,6 +6,9 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
 import travel_recommendation.dto.LikeDto;
 import travel_recommendation.model.*;
+import travel_recommendation.model.enums.DestinationType;
+import travel_recommendation.model.enums.TransportationType;
+import travel_recommendation.model.enums.Weather;
 import travel_recommendation.repository.*;
 import travel_recommendation.service.interfaces.DestinationService;
 

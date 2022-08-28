@@ -6,6 +6,7 @@ import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import travel_recommendation.model.*;
+import travel_recommendation.model.enums.Status;
 
 import java.time.LocalDate;
 import java.util.Date;

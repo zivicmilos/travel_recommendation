@@ -3,8 +3,8 @@ dialect  "mvel"
 
 import travel_recommendation.model.User;
 import travel_recommendation.model.Destination;
-import travel_recommendation.model.Status;
-import travel_recommendation.model.DestinationType;
+import travel_recommendation.model.enums.Status;
+import travel_recommendation.model.enums.DestinationType;
 import travel_recommendation.model.Location;
 
 rule "Higher score if weather in user location is matching with destination weather"

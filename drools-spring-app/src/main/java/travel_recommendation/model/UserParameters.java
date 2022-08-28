@@ -2,6 +2,9 @@ package travel_recommendation.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import travel_recommendation.model.enums.DestinationType;
+import travel_recommendation.model.enums.TransportationType;
+import travel_recommendation.model.enums.Weather;
 
 @Data
 @AllArgsConstructor

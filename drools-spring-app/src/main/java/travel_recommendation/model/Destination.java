@@ -3,9 +3,11 @@ package travel_recommendation.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import travel_recommendation.model.enums.DestinationType;
+import travel_recommendation.model.enums.TransportationType;
+import travel_recommendation.model.enums.Weather;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 

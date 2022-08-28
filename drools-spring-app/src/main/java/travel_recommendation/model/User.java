@@ -1,9 +1,11 @@
 package travel_recommendation.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import travel_recommendation.model.enums.Status;
+import travel_recommendation.model.enums.UserRank;
+import travel_recommendation.model.enums.Weather;
 
 import javax.persistence.*;
 import java.time.LocalDate;

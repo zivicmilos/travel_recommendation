@@ -1,13 +1,12 @@
 package travel_recommendation.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
-import org.kie.api.definition.type.Timestamp;
+import travel_recommendation.model.enums.TransportationType;
 
 import javax.persistence.*;
 import java.time.LocalDate;

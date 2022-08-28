@@ -4,7 +4,7 @@ dialect  "mvel"
 import travel_recommendation.model.User;
 import travel_recommendation.model.Destination;
 import travel_recommendation.model.Location;
-import travel_recommendation.model.TransportationType;
+import travel_recommendation.model.enums.TransportationType;
 
 /** Low budget  */
 

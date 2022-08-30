@@ -2,8 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Destination } from 'src/app/model/destination-model';
 import { Travel } from 'src/app/model/travel-model';
-import { DestinationService } from 'src/app/services/destination.service';
-import { UserService } from 'src/app/services/user.service';
+import { TravelDto } from 'src/app/model/travelDto-model';
+import { DestinationService } from 'src/app/services/destination-service/destination.service';
+import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
   selector: 'app-reservation',
@@ -22,9 +23,9 @@ export class ReservationComponent implements OnInit {
   }
 
   reserve() {
-    var travel: Travel = new Travel();
-    travel.user = this.userService.getCurrentUser();
-    travel.destination = this.destination;
+    var travel: TravelDto = new TravelDto();
+    travel.user = this.userService.getCurrentUser().username;
+    travel.destination = this.destination.location.city;
     travel.travelDate = this.travelDate;
     travel.transportationType = this.transportationType;
 

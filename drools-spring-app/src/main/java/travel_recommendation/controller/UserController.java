@@ -1,9 +1,8 @@
 package travel_recommendation.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import travel_recommendation.dto.TravelDto;
 import travel_recommendation.model.*;
 import travel_recommendation.service.interfaces.UserService;
 
@@ -27,13 +26,8 @@ public class UserController {
         return userService.getTravelsByUsername(username);
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> login(@RequestBody User user) {
-        return new ResponseEntity<>(userService.login(user), HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/travel/cancel", method = RequestMethod.POST, consumes = "application/json")
-    public void cancelTravel(@RequestBody Travel travel) {
-        userService.cancelTravel(travel);
+    public void cancelTravel(@RequestBody TravelDto travelDto) {
+        userService.cancelTravel(travelDto);
     }
 }

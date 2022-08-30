@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Destination } from 'src/app/model/destination-model';
 import { Like } from 'src/app/model/like-model';
 import { User } from 'src/app/model/user-model';
-import { DestinationService } from 'src/app/services/destination.service';
-import { UserService } from 'src/app/services/user.service';
+import { DestinationService } from 'src/app/services/destination-service/destination.service';
+import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
   selector: 'app-home',

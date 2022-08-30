@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Travel } from 'src/app/model/travel-model';
-import { UserService } from 'src/app/services/user.service';
+import { TravelDto } from 'src/app/model/travelDto-model';
+import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
   selector: 'app-travel',
@@ -25,7 +26,14 @@ export class TravelComponent implements OnInit {
   }
   
   cancel(travel: Travel) {
-    this.userService.cancelTravel(travel).subscribe();
+    let travelDto: TravelDto = new TravelDto();
+    travelDto.user = travel.user.username;
+    travelDto.destination = travel.destination.location.city;
+    travelDto.grade = travel.grade;
+    travelDto.cost = travel.cost;
+    travelDto.travelDate = travel.travelDate;
+    travelDto.transportationType = travel.transportationType; 
+    this.userService.cancelTravel(travelDto).subscribe();
     this.getTravels();
   }
 

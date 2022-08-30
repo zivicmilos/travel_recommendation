@@ -2,6 +2,7 @@ package travel_recommendation.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import travel_recommendation.dto.TravelDto;
 import travel_recommendation.model.*;
 import travel_recommendation.repository.*;
 import travel_recommendation.service.interfaces.UserService;
@@ -21,29 +22,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object login(User user) {
-        List<User> users = userRepository.findAll();
-        User retVal = users.stream().filter(u->u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())).findFirst().orElse(null);
-        if (retVal != null) {
-            return retVal;
-        }
-        else if (users.stream().filter(u->u.getUsername().equals(user.getUsername())).findFirst().orElse(null) != null) {
-            this.destinationService.addLoginFailure(new LoginFailure(users.stream().filter(u->u.getUsername().equals(user.getUsername())).findFirst().orElse(null)));
-            this.destinationService.cepRules();
-            return "\"" + "Wrong password!" + "\"";
-        }
-        else {
-            return "\"" + "User with this username does not exists!" + "\"";
-        }
-    }
-
-    @Override
     public List<Travel> getTravelsByUsername(String username) {
         return travelRepository.findByUsername(username);
     }
 
     @Override
-    public void cancelTravel(Travel travel) {
+    public void cancelTravel(TravelDto travelDto) {
+        Travel travel = travelRepository.findByParams(travelDto.getUser(), travelDto.getDestination(), travelDto.getTravelDate());
         travelRepository.deleteById(travel.getId());
 
         destinationService.addDeletedTravel(new DeletedTravel(travel.getUser(), travel.getDestination(), travel.getTravelDate()));

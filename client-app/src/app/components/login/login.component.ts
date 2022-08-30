@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user-model';
-import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -12,13 +13,13 @@ export class LoginComponent implements OnInit {
   user: User = new User();
   errorMessage: string = '';
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
   }
 
   login() {
-    this.userService.login(this.user).subscribe(
+    /*this.userService.login(this.user).subscribe(
       (data: any) => {
         if (data.username) {
           this.userService.setCurrentUser(data);
@@ -27,7 +28,8 @@ export class LoginComponent implements OnInit {
         else {
           this.errorMessage = data;
         }
-      });
+      });*/
+      this.authService.login(this.user.username, this.user.password);
   }
 
   isLoginBlocked() {

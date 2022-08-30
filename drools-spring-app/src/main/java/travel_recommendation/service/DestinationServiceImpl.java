@@ -5,6 +5,7 @@ import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
 import travel_recommendation.dto.LikeDto;
+import travel_recommendation.dto.TravelDto;
 import travel_recommendation.model.*;
 import travel_recommendation.model.enums.DestinationType;
 import travel_recommendation.model.enums.TransportationType;
@@ -89,9 +90,13 @@ public class DestinationServiceImpl implements DestinationService {
     }
 
     @Override
-    public void reserve(Travel travel) {
-        travel.setUser(userRepository.findById(travel.getUser().getId()).orElse(null));
-        travel.setDestination(destinationRepository.findById(travel.getDestination().getId()).orElse(null));
+    public void reserve(TravelDto travelDto) {
+        Travel travel = new Travel();
+        travel.setUser(userRepository.findByUsername(travelDto.getUser()));
+        travel.setDestination(destinationRepository.findByCity(travelDto.getDestination()));
+        travel.setTransportationType(travelDto.getTransportationType());
+        travel.setGrade(travelDto.getGrade());
+        travel.setTravelDate(travelDto.getTravelDate());
         travel.setCost(travel.getDestination().costByTransportType(travel.getTransportationType(), travel.getUser().getLocation()));
 
         travelRepository.save(travel);

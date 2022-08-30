@@ -1,6 +1,7 @@
 package travel_recommendation.service.interfaces;
 
 import travel_recommendation.dto.LikeDto;
+import travel_recommendation.dto.TravelDto;
 import travel_recommendation.model.*;
 import travel_recommendation.model.enums.DestinationType;
 import travel_recommendation.model.enums.TransportationType;
@@ -14,7 +15,7 @@ public interface DestinationService {
 
     String like(LikeDto like);
 
-    void reserve(Travel travel);
+    void reserve(TravelDto travelDto);
 
     void cepRules();
 }

@@ -1,0 +1,48 @@
+version: '3.1'
+services:
+  travels-app:
+    container_name: travels-app
+    image: travels-app
+    build:
+      context: .
+      dockerfile: ./drools-spring-app/Dockerfile
+    restart: on-failure
+    environment:
+      DATABASE_DOMAIN: ${DATABASE_DOMAIN}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_SCHEMA: ${DATABASE_SCHEMA}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - travels-db
+    networks:
+      - network
+
+  travels-db:
+    image: postgres
+    container_name: travels-db
+    restart: on-failure
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=travels
+    networks:
+      - network
+
+  client-app:
+    image: client-app
+    container_name: client-app
+    build:
+      context: .
+      dockerfile: ./client-app/Dockerfile
+    restart: on-failure
+    ports:
+      - "4200:4200"
+    networks:
+      - network
+
+networks:
+  network:
+    driver: bridge

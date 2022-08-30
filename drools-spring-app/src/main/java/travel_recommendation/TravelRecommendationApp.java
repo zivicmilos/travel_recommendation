@@ -17,11 +17,6 @@ public class TravelRecommendationApp {
 
 	@Bean
 	public KieContainer kieContainer() {
-		KieServices ks = KieServices.Factory.get();
-		KieContainer kContainer = ks
-				.newKieContainer(ks.newReleaseId("travel_recommendation", "drools-spring-kjar", "0.0.1-SNAPSHOT"));
-		KieScanner kScanner = ks.newKieScanner(kContainer);
-		kScanner.start(10_000);
-		return kContainer;
+		return KieServices.Factory.get().getKieClasspathContainer();
 	}
 }

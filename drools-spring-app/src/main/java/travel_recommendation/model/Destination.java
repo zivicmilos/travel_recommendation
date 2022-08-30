@@ -93,4 +93,9 @@ public class Destination {
         }
     }
 
+    @Override
+    public String toString() {
+        return this.location.getCity() + ", " + this.location.getCountry();
+    }
+
 }

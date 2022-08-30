@@ -18,6 +18,10 @@ export class UserService {
     return this.http.get(this.baseUrl + '/travel?username='+this.getCurrentUser().username, { headers: this.headers });
   }
 
+  getUserByUsername(username: string) {
+    return this.http.get(this.baseUrl + '?username='+username, { headers: this.headers });
+  }
+
   cancelTravel(travel: TravelDto) {
     return this.http.post(this.baseUrl + '/travel/cancel', travel, { headers: this.headers });
   }

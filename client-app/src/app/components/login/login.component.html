@@ -28,7 +28,7 @@
 
             <!-- Submit button -->
             <div class="row">
-                <button [disabled]="isLoginBlocked()" type="button" class="btn btn-primary btn-block mb-4" (click)="login()">Login</button>
+                <button [disabled]="isLoginBlocked()" type="submit" class="btn btn-primary btn-block mb-4" (keyup.enter)="login()" (click)="login()">Login</button>
             </div>
 
             <p *ngIf="errorMessage" style="color: red;">

@@ -66,10 +66,10 @@ INSERT INTO locations (city, country, continent, coordinates_id) VALUES
     ('Abidjan', 'Cote d Ivoire', 'Africa', 31),
     ('Luanda', 'Angola', 'Africa', 32);
 
-INSERT INTO users (name, lastname, username, password, email, date_of_birth, status, location_id) VALUES
-    ('Petar', 'Petrovic', 'pera', '$2a$12$bxMF9a71CFSL2ciknZLUOeHBbURkcHUnSxvBGCtCeVnkk.AA3gYOu', 'pera@gmail.com', DATE '1996-05-05', 0, 1),
-    ('John', 'Johnson', 'john', '$2a$12$BXtr4o/Gw5UZqQwWWgsroeOZo9z8yM2E3tPA3uILicJKf4w8808F2', 'john@gmail.com', DATE '1976-09-25', 2, 3),
-    ('Marko', 'Markovic', 'mare', '$2a$12$nPNtmguKlE51G0HeOd50x.r6S/zBkouqPWqnnYv4fvyQjmqjOzkAi', 'marko@gmail.com', DATE '1981-03-03', 2, 1);
+INSERT INTO users (name, lastname, username, password, email, date_of_birth, status, location_id, user_rank) VALUES
+    ('Petar', 'Petrovic', 'pera', '$2a$12$bxMF9a71CFSL2ciknZLUOeHBbURkcHUnSxvBGCtCeVnkk.AA3gYOu', 'pera@gmail.com', DATE '1996-05-05', 0, 1, 4),
+    ('John', 'Johnson', 'john', '$2a$12$BXtr4o/Gw5UZqQwWWgsroeOZo9z8yM2E3tPA3uILicJKf4w8808F2', 'john@gmail.com', DATE '1976-09-25', 2, 3, 4),
+    ('Marko', 'Markovic', 'mare', '$2a$12$nPNtmguKlE51G0HeOd50x.r6S/zBkouqPWqnnYv4fvyQjmqjOzkAi', 'marko@gmail.com', DATE '1981-03-03', 2, 1, null);
 
 INSERT INTO roles (name) VALUES
     ('ROLE_ADMIN'),
@@ -152,7 +152,7 @@ INSERT INTO transportation_types (id, transportation_type) VALUES
 
 INSERT INTO travels (user_id, destination_id, travel_date, transportation_type, grade, cost) VALUES
     (1, 1, DATE '2022-06-06', 4, 5, 250),
-    (1, 1, DATE '2022-06-06', 4, 4, 250),
+    (1, 5, DATE '2022-06-11', 4, 4, 250),
     (1, 2, DATE '2022-05-01', 4, 4, 400);
 
 INSERT INTO likes (user_id, destination_id, time) VALUES

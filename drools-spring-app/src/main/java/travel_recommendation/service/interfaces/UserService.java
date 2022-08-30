@@ -9,7 +9,13 @@ import java.util.List;
 public interface UserService {
     List<User> getUsers();
 
+    User getUserByUsername(String username);
+
     List<Travel> getTravelsByUsername(String username);
 
     void cancelTravel(TravelDto travelDto);
+
+    void updateUserRank(String username);
+
+    void updateUserRank(User user);
 }

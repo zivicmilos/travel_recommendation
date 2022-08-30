@@ -12,7 +12,9 @@ import travel_recommendation.model.enums.TransportationType;
 import travel_recommendation.model.enums.Weather;
 import travel_recommendation.repository.*;
 import travel_recommendation.service.interfaces.DestinationService;
+import travel_recommendation.service.interfaces.UserService;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -25,6 +27,7 @@ public class DestinationServiceImpl implements DestinationService {
     private final LikeRepository likeRepository;
     private final TravelRepository travelRepository;
     private final KieContainer kieContainer;
+    private final UserService userService;
     private List<String> list = new ArrayList<>();
     private List<DeletedTravel> deletedTravels = new ArrayList<>();
     private List<LoginFailure> loginFailures = new ArrayList<>();
@@ -63,8 +66,6 @@ public class DestinationServiceImpl implements DestinationService {
         kieSession.fireAllRules();
         kieSession.getAgenda().getAgendaGroup("user_activity_rules").setFocus();
         kieSession.fireAllRules();
-        kieSession.getAgenda().getAgendaGroup("update_user_rank").setFocus();
-        kieSession.fireAllRules();
         kieSession.getAgenda().getAgendaGroup("discount_by_user_rank").setFocus();
         kieSession.fireAllRules();
         kieSession.dispose();
@@ -100,6 +101,10 @@ public class DestinationServiceImpl implements DestinationService {
         travel.setCost(travel.getDestination().costByTransportType(travel.getTransportationType(), travel.getUser().getLocation()));
 
         travelRepository.save(travel);
+
+        User user = userRepository.findByUsername(travelDto.getUser());
+        user.addTravel(travel);
+        userService.updateUserRank(user);
 
         cepRules();
     }

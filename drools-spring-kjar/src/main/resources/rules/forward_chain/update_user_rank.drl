@@ -2,7 +2,6 @@ package rules.forward_chain;
 dialect  "mvel"
 
 import travel_recommendation.model.User;
-import travel_recommendation.model.Destination;
 import travel_recommendation.model.Travel;
 import travel_recommendation.model.enums.UserRank;
 import java.time.LocalDate;
@@ -14,7 +13,6 @@ rule "User gets platinum rank"
     lock-on-active
     when
         $u: User(userRank != UserRank.PLATINUM, $travelHistory: travels)
-        $d: Destination($u.username == username)
         List(size >= 5) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(1))) from $travelHistory)
     then
         modify($u){setUserRank(UserRank.PLATINUM)}
@@ -26,7 +24,6 @@ rule "User gets gold rank"
     lock-on-active
     when
         $u: User(userRank == UserRank.SILVER || userRank == UserRank.BRONZE || userRank == UserRank.REGULAR, $travelHistory: travels)
-        $d: Destination($u.username == username)
         List(size >= 3) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(1))) from $travelHistory)
     then
         modify($u){setUserRank(UserRank.GOLD)}
@@ -38,7 +35,6 @@ rule "User gets silver rank"
     lock-on-active
     when
         $u: User(userRank == UserRank.BRONZE || userRank == UserRank.REGULAR, $travelHistory: travels)
-        $d: Destination($u.username == username)
         List(size >= 5) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(3))) from $travelHistory)
     then
         modify($u){setUserRank(UserRank.SILVER)}
@@ -49,8 +45,7 @@ rule "User gets bronze rank"
     agenda-group "update_user_rank"
     lock-on-active
     when
-        $u: User(userRank == UserRank.REGULAR, $travelHistory: travels)
-        $d: Destination($u.username == username)
+        $u: User(userRank == UserRank.REGULAR, userRank != UserRank.BRONZE, $travelHistory: travels)
         List(size >= 3) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(3))) from $travelHistory)
     then
         modify($u){setUserRank(UserRank.BRONZE)}

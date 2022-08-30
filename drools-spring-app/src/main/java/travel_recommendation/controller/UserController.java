@@ -16,9 +16,15 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/all" +
+            "", method = RequestMethod.GET, produces = "application/json")
     public List<User> getUsers() {
         return userService.getUsers();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
+    public User getUserByUsername(@PathParam("username") String username) {
+        return userService.getUserByUsername(username);
     }
 
     @RequestMapping(value = "/travel", method = RequestMethod.GET, produces = "application/json")

@@ -5,7 +5,6 @@ import travel_recommendation.model.User;
 import travel_recommendation.model.Destination;
 import travel_recommendation.model.Travel;
 import travel_recommendation.model.enums.UserRank;
-import java.time.LocalDate;
 import java.util.List;
 
 rule "Discount for platinum users"

@@ -43,7 +43,11 @@ public class UserServiceImpl implements UserService {
         /*destinationService.addDeletedTravel(new DeletedTravel(travel.getUser(), travel.getDestination(), travel.getTravelDate()));
         destinationService.cepRules();*/
 
-        updateUserRank(travelDto.getUser());
+        User user = userRepository.findByUsername(travelDto.getUser());
+        user.getTravels().removeIf(t -> t.getUser().getUsername().equals(travelDto.getUser()) &&
+                                        t.getDestination().getLocation().getCity().equals(travelDto.getDestination()) &&
+                                        t.getTravelDate().isEqual(travelDto.getTravelDate()));
+        updateUserRank(user);
     }
 
     @Override

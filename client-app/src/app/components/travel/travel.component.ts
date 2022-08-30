@@ -33,8 +33,10 @@ export class TravelComponent implements OnInit {
     travelDto.cost = travel.cost;
     travelDto.travelDate = travel.travelDate;
     travelDto.transportationType = travel.transportationType; 
-    this.userService.cancelTravel(travelDto).subscribe();
-    this.getTravels();
+    this.userService.cancelTravel(travelDto).subscribe(
+      () => this.getTravels()
+    );
+    
   }
 
   isGreatherThanToday(travelDate: Date) {

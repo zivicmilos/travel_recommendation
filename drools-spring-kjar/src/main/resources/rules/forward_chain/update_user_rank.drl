@@ -23,7 +23,7 @@ rule "User gets gold rank"
     agenda-group "update_user_rank"
     lock-on-active
     when
-        $u: User(userRank == UserRank.SILVER || userRank == UserRank.BRONZE || userRank == UserRank.REGULAR, $travelHistory: travels)
+        $u: User(userRank == UserRank.SILVER || userRank == UserRank.BRONZE || userRank == UserRank.REGULAR, userRank != UserRank.GOLD, $travelHistory: travels)
         List(size >= 3) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(1))) from $travelHistory)
     then
         modify($u){setUserRank(UserRank.GOLD)}
@@ -34,7 +34,7 @@ rule "User gets silver rank"
     agenda-group "update_user_rank"
     lock-on-active
     when
-        $u: User(userRank == UserRank.BRONZE || userRank == UserRank.REGULAR, $travelHistory: travels)
+        $u: User(userRank == UserRank.BRONZE || userRank == UserRank.REGULAR, userRank != UserRank.SILVER, $travelHistory: travels)
         List(size >= 5) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(3))) from $travelHistory)
     then
         modify($u){setUserRank(UserRank.SILVER)}
@@ -49,4 +49,15 @@ rule "User gets bronze rank"
         List(size >= 3) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(3))) from $travelHistory)
     then
         modify($u){setUserRank(UserRank.BRONZE)}
+end
+
+rule "User gets regular rank"
+    salience 5
+    agenda-group "update_user_rank"
+    lock-on-active
+    when
+        $u: User(userRank != UserRank.REGULAR, $travelHistory: travels)
+        List(size < 3) from collect(Travel(travelDate.isAfter(LocalDate.now().minusMonths(3))) from $travelHistory)
+    then
+        modify($u){setUserRank(UserRank.REGULAR)}
 end

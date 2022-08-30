@@ -1,10 +1,16 @@
 package travel_recommendation.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
 
 import java.time.LocalDate;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Role(Role.Type.EVENT)
 @Expires("2h30m")
 public class DeletedTravel {
@@ -12,33 +18,4 @@ public class DeletedTravel {
     private Destination destination;
     private LocalDate travelDate;
 
-    public DeletedTravel(User user, Destination destination, LocalDate travelDate) {
-        this.user = user;
-        this.destination = destination;
-        this.travelDate = travelDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Destination getDestination() {
-        return destination;
-    }
-
-    public void setDestination(Destination destination) {
-        this.destination = destination;
-    }
-
-    public LocalDate getTravelDate() {
-        return travelDate;
-    }
-
-    public void setTravelDate(LocalDate travelDate) {
-        this.travelDate = travelDate;
-    }
 }

@@ -22,8 +22,7 @@ export class HomeComponent implements OnInit {
   constructor(private destinationService: DestinationService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    let username: string = localStorage.getItem('username') || 'null';
-    this.userService.getUserByUsername(username).subscribe(
+    this.userService.getUserByUsername().subscribe(
       (data: any) => {
         this.userService.setCurrentUser(data);
         this.currentUser = data;
@@ -32,7 +31,7 @@ export class HomeComponent implements OnInit {
   }
 
   findDestinations() {
-    this.destinationService.findDestinations(this.currentUser.username, this.transportationType, this.budget, this.destinationType,
+    this.destinationService.findDestinations(this.transportationType, this.budget, this.destinationType,
       this.weather, this.continent).subscribe(
         (data: any) => {
           this.destinations = data;

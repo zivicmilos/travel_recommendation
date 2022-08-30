@@ -7,6 +7,7 @@ import travel_recommendation.model.*;
 import travel_recommendation.service.interfaces.UserService;
 
 import javax.websocket.server.PathParam;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,13 +24,13 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public User getUserByUsername(@PathParam("username") String username) {
-        return userService.getUserByUsername(username);
+    public User getUserByUsername(Principal user) {
+        return userService.getUserByUsername(user.getName());
     }
 
     @RequestMapping(value = "/travel", method = RequestMethod.GET, produces = "application/json")
-    public List<Travel> getTravelsByUsername(@PathParam("username") String username) {
-        return userService.getTravelsByUsername(username);
+    public List<Travel> getTravelsByUsername(Principal user) {
+        return userService.getTravelsByUsername(user.getName());
     }
 
     @RequestMapping(value = "/travel/cancel", method = RequestMethod.POST, consumes = "application/json")

@@ -13,6 +13,7 @@ import travel_recommendation.model.enums.TransportationType;
 import travel_recommendation.model.enums.Weather;
 import travel_recommendation.service.interfaces.DestinationService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,14 +25,14 @@ public class DestinationController {
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
-    public List<Destination> getParameters(@RequestParam() String username,
-                                           @RequestParam() TransportationType transportationType,
+    public List<Destination> getParameters(@RequestParam() TransportationType transportationType,
                                            @RequestParam() double budget,
                                            @RequestParam() DestinationType destinationType,
                                            @RequestParam() Weather weather,
-                                           @RequestParam() String continent) {
+                                           @RequestParam() String continent,
+                                           Principal user) {
 
-        return destinationService.getDestinationList(username, transportationType, budget, destinationType, weather, continent);
+        return destinationService.getDestinationList(user.getName(), transportationType, budget, destinationType, weather, continent);
     }
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")

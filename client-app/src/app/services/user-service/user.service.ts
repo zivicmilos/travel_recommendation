@@ -8,18 +8,18 @@ import { User } from '../../model/user-model';
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl: String = 'http://localhost:8080/user';
+  baseUrl: string = 'http://localhost:8080/user';
   headers = new HttpHeaders({'Content-Type' : 'application/json', 
                              'Authorization' : `Bearer ${localStorage['jwt']}`});
 
   constructor(private http: HttpClient) { }
 
   getTravelsByUsername() {
-    return this.http.get(this.baseUrl + '/travel?username='+this.getCurrentUser().username, { headers: this.headers });
+    return this.http.get(this.baseUrl + '/travel', { headers: this.headers });
   }
 
-  getUserByUsername(username: string) {
-    return this.http.get(this.baseUrl + '?username='+username, { headers: this.headers });
+  getUserByUsername() {
+    return this.http.get(this.baseUrl, { headers: this.headers });
   }
 
   cancelTravel(travel: TravelDto) {

@@ -7,6 +7,6 @@ COPY ./client-app .
 RUN npm run build
 
 ### STAGE 2: Run ###
-FROM nginx:1.13.1-alpine
+FROM nginx:1.14.0-alpine
 COPY ./client-app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/app/dist/client-app /usr/share/nginx/html

@@ -34,7 +34,14 @@ export class TravelComponent implements OnInit {
     travelDto.travelDate = travel.travelDate;
     travelDto.transportationType = travel.transportationType; 
     this.userService.cancelTravel(travelDto).subscribe(
-      () => this.getTravels()
+      () => {
+        this.userService.getUserByUsername().subscribe(
+          (data: any) => {
+            this.userService.setCurrentUser(data);
+          }
+        );
+        this.getTravels();
+      }
     );
     
   }

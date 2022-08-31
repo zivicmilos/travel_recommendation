@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { TravelDto } from 'src/app/model/travelDto-model';
 import { Travel } from '../../model/travel-model';
 import { User } from '../../model/user-model';
@@ -9,17 +10,26 @@ import { User } from '../../model/user-model';
 })
 export class UserService {
   baseUrl: string = 'http://localhost:8080/user';
-  headers = new HttpHeaders({'Content-Type' : 'application/json', 
-                             'Authorization' : `Bearer ${localStorage['jwt']}`});
+  headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage['jwt']}`
+  });
 
   constructor(private http: HttpClient) { }
 
-  getTravelsByUsername() {
-    return this.http.get(this.baseUrl + '/travel', { headers: this.headers });
+  getUserByUsername(): Observable<Object>;
+
+  getUserByUsername(headers: HttpHeaders): Observable<Object>;
+
+  getUserByUsername(headers?: HttpHeaders) {
+    if (headers != null)
+      return this.http.get(this.baseUrl, { headers: headers });
+    else
+      return this.http.get(this.baseUrl, { headers: this.headers });
   }
 
-  getUserByUsername() {
-    return this.http.get(this.baseUrl, { headers: this.headers });
+  getTravelsByUsername() {
+    return this.http.get(this.baseUrl + '/travel', { headers: this.headers });
   }
 
   cancelTravel(travel: TravelDto) {
@@ -27,15 +37,20 @@ export class UserService {
   }
 
   setCurrentUser(user: User) {
-    sessionStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
   getCurrentUser() {
-    let s = sessionStorage.getItem('user');
+    let s = localStorage.getItem('user');
     let ss: string = '';
     if (s !== null) {
       ss = s;
+      return JSON.parse(ss);
     }
-    return JSON.parse(ss);
+    return null;
+  }
+
+  removeCurrentUser() {
+    localStorage.removeItem('user');
   }
 }

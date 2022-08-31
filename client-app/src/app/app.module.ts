@@ -9,6 +9,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { TravelComponent } from './components/travel/travel.component';
 import { LoginComponent } from './components/login/login.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { LoginComponent } from './components/login/login.component';
     HomeComponent,
     ReservationComponent,
     TravelComponent,
-    LoginComponent
+    LoginComponent,
+    AdminComponent,
+    NavbarComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

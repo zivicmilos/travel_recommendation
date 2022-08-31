@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user-model';
@@ -29,7 +30,36 @@ export class LoginComponent implements OnInit {
           this.errorMessage = data;
         }
       });*/
-      this.authService.login(this.user.username, this.user.password);
+    this.authService.login(this.user.username, this.user.password).subscribe(
+      {
+        next: (response) => {
+          localStorage.setItem('jwt', response.token);
+          console.log(response.token)
+          //setTimeout(() => {
+          this.userService.getUserByUsername(new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${response.token}`
+          })).subscribe(
+            (data: any) => {
+              if (data.roles[0].name === 'ROLE_CLIENT') {
+                this.router.navigate(['/home']).then(() => {
+                  //localStorage.setItem('username', this.user.username);
+                  this.userService.setCurrentUser(data);
+                  location.reload()
+                });
+              } else if (data.roles[0].name === 'ROLE_ADMIN') {
+                this.router.navigate(['/admin']).then(() => {
+                  //localStorage.setItem('username', this.user.username);
+                  this.userService.setCurrentUser(data);
+                  location.reload()
+                });
+              }
+            }
+          )
+        }/*,2000)}/*,
+          error: (error: HttpErrorResponse) => {
+          }*/
+      });
   }
 
   isLoginBlocked() {
@@ -38,7 +68,7 @@ export class LoginComponent implements OnInit {
     var today = new Date();
     if (date > today)
       return false;
-    else 
+    else
       return false;
   }
 

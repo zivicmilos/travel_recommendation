@@ -30,8 +30,13 @@ export class ReservationComponent implements OnInit {
     travel.transportationType = this.transportationType;
 
     this.destinationService.reserve(travel).subscribe(
-      (data) => {
-        this.router.navigate(['/home']);
+      () => {
+        this.userService.getUserByUsername().subscribe(
+          (data: any) => {
+            this.userService.setCurrentUser(data);
+            this.router.navigate(['/home']);
+          }
+        );
       }
     );
   }

@@ -22,12 +22,12 @@ export class HomeComponent implements OnInit {
   constructor(private destinationService: DestinationService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.userService.getUserByUsername().subscribe(
+    /*this.userService.getUserByUsername().subscribe(
       (data: any) => {
         this.userService.setCurrentUser(data);
         this.currentUser = data;
-      });
-    //this.currentUser = this.userService.getCurrentUser();
+      });*/
+    this.currentUser = this.userService.getCurrentUser();
   }
 
   findDestinations() {

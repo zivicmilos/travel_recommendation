@@ -24,6 +24,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (request.getRequestURI().endsWith("/login") || request.getRequestURI().endsWith("/actuator/prometheus") ||
+            request.getRequestURI().endsWith("/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String tokenHeader = request.getHeader("Authorization");
         String username = null;
         String token = null;

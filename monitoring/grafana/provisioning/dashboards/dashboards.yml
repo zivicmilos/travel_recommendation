@@ -1,0 +1,22 @@
+apiVersion: 1
+
+providers:
+  - name: Node Exporter
+    type: file
+    options:
+      path:  /var/lib/grafana/dashboards/node-exporter
+
+  - name: cAdvisor
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards/cadvisor
+
+  - name: (JVM) Micrometer
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards/micrometer
+
+  - name: Logging, Tracing and Custom Metrics
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards/my-dashboard

@@ -1,4 +1,10 @@
 version: '3.1'
+
+x-logging: &fluent-bit
+  driver: fluentd
+  options:
+    fluentd-address: ${FLUENT_BIT_ADDRESS}:24224
+
 services:
   travels-app:
     container_name: travels-app
@@ -13,12 +19,16 @@ services:
       DATABASE_SCHEMA: ${DATABASE_SCHEMA}
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      JAEGER_DOMAIN: ${JAEGER_DOMAIN}
+      JAEGER_PORT: ${JAEGER_PORT}
     ports:
       - "8080:8080"
+    logging: *fluent-bit
     depends_on:
       - travels-db
     networks:
-      - network
+      - services
+      - monitoring
 
   travels-db:
     image: postgres
@@ -28,8 +38,10 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=travels
+    logging: *fluent-bit
     networks:
-      - network
+      - services
+      - monitoring
 
   client-app:
     image: client-app
@@ -38,11 +50,16 @@ services:
       context: .
       dockerfile: ./client-app/Dockerfile
     restart: on-failure
+    logging: *fluent-bit
     ports:
       - "4200:4200"
     networks:
-      - network
+      - services
+      - monitoring
 
 networks:
-  network:
+  services:
+    name: services
     driver: bridge
+  monitoring:
+    external: true

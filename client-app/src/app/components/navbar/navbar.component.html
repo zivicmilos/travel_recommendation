@@ -10,44 +10,50 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a *ngIf="isAdmin" class="navbar-brand" href="/admin">
-            <img src="../../../favicon.ico" width="50" height="50" alt="">
-        </a>
-        <a *ngIf="!isAdmin" class="navbar-brand" href="/home">
-            <img src="../../../favicon.ico" width="50" height="50" alt="">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="container-fluid">
+            <a *ngIf="isAdmin" class="navbar-brand" href="/admin">
+                <img src="../../../favicon.ico" width="50" height="50" alt="">
+            </a>
+            <a *ngIf="!isAdmin" class="navbar-brand" href="/home">
+                <img src="../../../favicon.ico" width="50" height="50" alt="">
+            </a>
 
-        <span class="mx-4"></span>
-        <div *ngIf="isAuthenticated && !isAdmin" class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/travel">My Travels</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Profile</a>
-                </li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <span class="mx-4"></span>
+            <div *ngIf="isAuthenticated && !isAdmin" class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/travel">My Travels</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profile</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div *ngIf="isAuthenticated && isAdmin" class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link active" aria-current="page" href="/admin">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Add destination</a>
+                    </li>
+                </ul>
+            </div>
+
+            <button *ngIf="isAuthenticated" class="btn btn-outline-primary my-2 my-sm-0" type="submit"
+                (click)="logOut()">Log Out</button>
+
         </div>
-
-        <div *ngIf="isAuthenticated && isAdmin" class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/admin">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Add destination</a>
-                </li>
-            </ul>
-        </div>
-
-        <button *ngIf="isAuthenticated" class="btn btn-outline-primary my-2 my-sm-0" type="submit" (click)="logOut()">Log Out</button>
     </nav>
 </body>
 

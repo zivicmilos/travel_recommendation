@@ -12,6 +12,7 @@ services:
       GF_RENDERING_SERVER_URL: http://renderer:8081/render
       GF_RENDERING_CALLBACK_URL: http://grafana:3000/
       GF_LOG_FILTERS: rendering:debug
+      GF_SECURITY_ALLOW_EMBEDDING: true
     volumes:
       - grafana:/var/lib/grafana
       - ./grafana/dashboards:/var/lib/grafana/dashboards

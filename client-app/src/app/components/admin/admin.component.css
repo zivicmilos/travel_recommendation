@@ -1,0 +1,14 @@
+html,
+body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+iframe { height: 50vh }
+
+div {
+  width: 50%;
+  height: 50%;
+  float: left;
+}

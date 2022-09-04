@@ -2,10 +2,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { GoogleMap } from '@angular/google-maps';
 import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { UserDto } from 'src/app/dto/user-dto';
 import { User } from 'src/app/model/user-model';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { UserService } from 'src/app/services/user-service/user.service';
+import { config } from 'src/config';
 import continents from '../../../assets/data/continents.json';
 
 @Component({
@@ -22,8 +25,14 @@ export class LoginComponent implements OnInit {
 
   center!: google.maps.LatLngLiteral;
   marker: any;
-
-  constructor(private userService: UserService, private router: Router, private authService: AuthService, private http: HttpClient) { }
+  apiLoaded: Observable<boolean>;
+  constructor(private userService: UserService, private router: Router, private authService: AuthService, private http: HttpClient) {
+    this.apiLoaded = http.jsonp('https://maps.googleapis.com/maps/api/js?key=' + config.API_TOKEN, 'callback')
+      .pipe(
+        map(() => true),
+        catchError(() => of(false)),
+      );
+  }
 
   ngOnInit(): void {
     navigator.geolocation.getCurrentPosition((position) => {

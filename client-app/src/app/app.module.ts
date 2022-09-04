@@ -6,13 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { ReservationComponent } from './components/reservation/reservation.component';
 import { TravelComponent } from './components/travel/travel.component';
 import { LoginComponent } from './components/login/login.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,12 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    CommonModule,
+    HttpClientJsonpModule
+  ],
+  exports: [
+    LoginComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

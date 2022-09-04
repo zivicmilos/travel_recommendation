@@ -112,27 +112,7 @@
                                                 <label class="form-label" for="regStatus">Status</label>
                                             </div>
 
-                                            <!--<google-map height="500px" width="100%"
-                                                [center]="center" [options]="options"
-                                                (mapClick)="eventHandler($event,'mapClick')"
-                                                (mapDblclick)="eventHandler($event,'mapDblclick')"
-                                                (mapDrag)="eventHandler($event,'mapDrag')"
-                                                (mapDragend)="eventHandler($event,'mapDragend')"
-                                                (mapRightclick)="eventHandler($event,'mapRightclick')"
-                                                (positionChanged)="eventHandler($event,'marker_positionChanged')"
-                                                >
-                                                <map-marker #markerElem="mapMarker" *ngFor="let marker of markers"
-                                                    [position]="marker.position" [label]="marker.label"
-                                                    [title]="marker.title" [options]="marker.options"
-                                                    >
-                                                </map-marker>
-
-                                            </google-map>
-
-                                            <button (click)="zoomIn()">Zoom in</button>
-                                            <button (click)="zoomOut()">Zoom out</button>
-                                            <button (click)="logCenter()">Log center</button>-->
-                                            <google-map [center]="center" (mapClick)="eventHandler($event,'mapClick')">
+                                            <google-map width="470px" [center]="center" (mapClick)="eventHandler($event,'mapClick')">
                                                 <map-marker #markerElem="mapMarker"
                                                     [position]="marker.position" [options]="marker.options">
                                                 </map-marker>

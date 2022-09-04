@@ -3,8 +3,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { GoogleMap } from '@angular/google-maps';
 import { Router } from '@angular/router';
 import { UserDto } from 'src/app/dto/user-dto';
-import { Coordinates } from 'src/app/model/coordinates-model';
-import { Location } from 'src/app/model/location-model';
 import { User } from 'src/app/model/user-model';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { UserService } from 'src/app/services/user-service/user.service';
@@ -126,8 +124,8 @@ export class LoginComponent implements OnInit {
     this.http.get<any>('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + event.latLng.lat() + ',' + event.latLng.lng() + '&key=AIzaSyAfeqYRd42QxNimU5mYU8ixQHToZNOoL5s&language=en').subscribe(
       (response) => {
         this.regUser.location.city = response.results[0].address_components[2].long_name;
-        this.regUser.location.country = response.results[0].address_components[5].long_name;
-        let s: string = response.results[0].address_components[5].short_name;
+        this.regUser.location.country = response.results.slice(-1)[0].address_components[0].long_name;
+        let s: string = response.results.slice(-1)[0].address_components[0].short_name;
         this.regUser.location.continent = continents[s as keyof typeof continents];
       }
     )

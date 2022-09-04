@@ -1,6 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { retry } from 'rxjs';
+import { UserDto } from 'src/app/dto/user-dto';
 import { UserService } from '../user-service/user.service';
 
 @Injectable({
@@ -21,5 +23,9 @@ export class AuthService {
       username: username,
       password: password
     });
+  }
+
+  register(userDto: UserDto) {
+    return this.http.post<any>(this.baseUrl + 'register', userDto);
   }
 }

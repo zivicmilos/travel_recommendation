@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Destination } from 'src/app/model/destination-model';
 import { Travel } from 'src/app/model/travel-model';
-import { TravelDto } from 'src/app/model/travelDto-model';
+import { TravelDto } from 'src/app/dto/travel-dto';
 import { DestinationService } from 'src/app/services/destination-service/destination.service';
 import { UserService } from 'src/app/services/user-service/user.service';
 

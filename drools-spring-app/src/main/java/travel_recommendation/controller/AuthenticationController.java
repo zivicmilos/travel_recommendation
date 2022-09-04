@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import travel_recommendation.dto.RegisterUserDto;
 import travel_recommendation.security.model.JwtRequest;
 import travel_recommendation.service.interfaces.AuthenticationService;
 
@@ -33,6 +34,13 @@ public class AuthenticationController {
         this.allRequests.increment();
         this.postRequests.increment();
         return ResponseEntity.ok(authenticationService.login(request));
+    }
+
+    @PostMapping("/register")
+    public void register(@RequestBody RegisterUserDto registerUserDto){
+        this.allRequests.increment();
+        this.postRequests.increment();
+        authenticationService.register(registerUserDto);
     }
 
 }

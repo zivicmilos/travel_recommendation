@@ -9,33 +9,148 @@
 </head>
 
 <body>
-    <div class=" d-flex justify-content-center">
-        
-        <form class="w-25 mt-5">
-            <h1>Welcome</h1>
-            <br><br>
-            <!-- Username input -->
-            <div class="form-outline mb-4">
-                <input name="username" type="username" id="username" class="form-control" [(ngModel)]="user.username"/>
-                <label class="form-label" for="username">Username</label>
-            </div>
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
 
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-                <input name="password" type="password" id="password" class="form-control"  [(ngModel)]="user.password"/>
-                <label class="form-label" for="password">Password</label>
-            </div>
+                            <div class="mb-md-5 mt-md-4 pb-5" (keyup.enter)="login()">
 
-            <!-- Submit button -->
-            <div class="row">
-                <button [disabled]="isLoginBlocked()" type="submit" class="btn btn-primary btn-block mb-4" (keyup.enter)="login()" (click)="login()">Login</button>
-            </div>
+                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                                <p class="text-white-50 mb-5">Please enter your username and password!</p>
 
-            <p *ngIf="errorMessage" style="color: red;">
-                {{errorMessage}}
-            </p>
-        </form>
-    </div>
+                                <div class="form-outline form-white mb-4">
+                                    <input type="username" id="username" class="form-control form-control-lg"
+                                        [(ngModel)]="user.username" />
+                                    <label class="form-label" for="username">Username</label>
+                                </div>
+
+                                <div class="form-outline form-white mb-4">
+                                    <input type="password" id="password" class="form-control form-control-lg"
+                                        [(ngModel)]="user.password" />
+                                    <label class="form-label" for="password">Password</label>
+                                </div>
+
+                                <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a>
+                                </p>
+
+                                <button class="btn btn-outline-light btn-lg px-5" type="submit"
+                                    (click)="login()">Login</button>
+                            </div>
+
+                            <div>
+                                <p class="mb-0">Don't have an account? <a href="#!" class="text-white-50 fw-bold"
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal">Sign Up</a>
+                                </p>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center">
+                                            <h2 class="modal-title w-100 fw-bold mb-2 text-uppercase"
+                                                id="exampleModalLabel">Register</h2>
+                                            <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p class="text-white-50 mb-5" style="margin-top: -30px;">Please enter your
+                                                personal info!</p>
+
+                                            <div class="form-outline form-white mb-4">
+                                                <input type="name" id="regName" class="form-control form-control-lg"
+                                                    [(ngModel)]="regUser.name" />
+                                                <label class="form-label" for="regName">Name</label>
+                                            </div>
+
+                                            <div class="form-outline form-white mb-4">
+                                                <input type="lastname" id="regLastname"
+                                                    class="form-control form-control-lg"
+                                                    [(ngModel)]="regUser.lastname" />
+                                                <label class="form-label" for="regLastname">Lastname</label>
+                                            </div>
+
+                                            <div class="form-outline form-white mb-4">
+                                                <input type="username" id="regUsername"
+                                                    class="form-control form-control-lg"
+                                                    [(ngModel)]="regUser.username" />
+                                                <label class="form-label" for="regUsername">Username</label>
+                                            </div>
+
+                                            <div class="form-outline form-white mb-4">
+                                                <input type="password" id="regPassword"
+                                                    class="form-control form-control-lg"
+                                                    [(ngModel)]="regUser.password" />
+                                                <label class="form-label" for="regPassword">Password</label>
+                                            </div>
+
+                                            <div class="form-outline form-white mb-4">
+                                                <input type="email" id="regEmail" class="form-control form-control-lg"
+                                                    [(ngModel)]="regUser.email" />
+                                                <label class="form-label" for="regEmail">Email</label>
+                                            </div>
+
+                                            <div class="form-outline form-white mb-4">
+                                                <input type="date" id="regBirthDate"
+                                                    class="form-control form-control-lg"
+                                                    [(ngModel)]="regUser.dateOfBirth" />
+                                                <label class="form-label" for="regBirthDate">Birth Date</label>
+                                            </div>
+
+                                            <div class="form-outline form-white mb-4">
+                                                <select name="regStatus" id="regStatus"
+                                                    class="form-control form-control-lg" [(ngModel)]="regUser.status">
+                                                    <option value="STUDENT">Student</option>
+                                                    <option value="UNEMPLOYED">Unemployed</option>
+                                                    <option value="EMPLOYED">Employed</option>
+                                                    <option value="RETIRED">Retired</option>
+                                                </select>
+                                                <label class="form-label" for="regStatus">Status</label>
+                                            </div>
+
+                                            <!--<google-map height="500px" width="100%"
+                                                [center]="center" [options]="options"
+                                                (mapClick)="eventHandler($event,'mapClick')"
+                                                (mapDblclick)="eventHandler($event,'mapDblclick')"
+                                                (mapDrag)="eventHandler($event,'mapDrag')"
+                                                (mapDragend)="eventHandler($event,'mapDragend')"
+                                                (mapRightclick)="eventHandler($event,'mapRightclick')"
+                                                (positionChanged)="eventHandler($event,'marker_positionChanged')"
+                                                >
+                                                <map-marker #markerElem="mapMarker" *ngFor="let marker of markers"
+                                                    [position]="marker.position" [label]="marker.label"
+                                                    [title]="marker.title" [options]="marker.options"
+                                                    >
+                                                </map-marker>
+
+                                            </google-map>
+
+                                            <button (click)="zoomIn()">Zoom in</button>
+                                            <button (click)="zoomOut()">Zoom out</button>
+                                            <button (click)="logCenter()">Log center</button>-->
+                                            <google-map [center]="center" (mapClick)="eventHandler($event,'mapClick')">
+                                                <map-marker #markerElem="mapMarker"
+                                                    [position]="marker.position" [options]="marker.options">
+                                                </map-marker>
+                                            </google-map>
+                                        </div>
+                                        <div class="modal-footer justify-content-center">
+                                            <button class="btn btn-outline-light btn-lg px-5" type="submit"
+                                                (click)="register()">Register</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
 
 </html>

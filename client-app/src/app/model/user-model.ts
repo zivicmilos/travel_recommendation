@@ -1,5 +1,7 @@
 export class User {
     constructor(
+        public name: string = '',
+        public lastname: string = '',
         public username: string = '',
         public password: string = '',
         public loginBlocked: Date = new Date(),

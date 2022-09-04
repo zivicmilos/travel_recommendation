@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TravelDto } from 'src/app/model/travelDto-model';
+import { TravelDto } from 'src/app/dto/travel-dto';
 import { Travel } from '../../model/travel-model';
 import { User } from '../../model/user-model';
 

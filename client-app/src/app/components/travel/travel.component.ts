@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Travel } from 'src/app/model/travel-model';
-import { TravelDto } from 'src/app/model/travelDto-model';
+import { TravelDto } from 'src/app/dto/travel-dto';
 import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
@@ -24,7 +24,7 @@ export class TravelComponent implements OnInit {
       }
     );
   }
-  
+
   cancel(travel: Travel) {
     let travelDto: TravelDto = new TravelDto();
     travelDto.user = travel.user.username;
@@ -32,7 +32,7 @@ export class TravelComponent implements OnInit {
     travelDto.grade = travel.grade;
     travelDto.cost = travel.cost;
     travelDto.travelDate = travel.travelDate;
-    travelDto.transportationType = travel.transportationType; 
+    travelDto.transportationType = travel.transportationType;
     this.userService.cancelTravel(travelDto).subscribe(
       () => {
         this.userService.getUserByUsername().subscribe(
@@ -43,7 +43,7 @@ export class TravelComponent implements OnInit {
         this.getTravels();
       }
     );
-    
+
   }
 
   isGreatherThanToday(travelDate: Date) {
@@ -52,7 +52,7 @@ export class TravelComponent implements OnInit {
     today.setHours(0,0,0,0);
     if (date > today)
       return true;
-    else 
+    else
       return false;
   }
 }

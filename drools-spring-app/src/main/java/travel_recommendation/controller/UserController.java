@@ -4,6 +4,7 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import travel_recommendation.dto.TravelDto;
 import travel_recommendation.model.*;
@@ -63,5 +64,13 @@ public class UserController {
         this.allRequests.increment();
         this.postRequests.increment();
         userService.cancelTravel(travelDto);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/suspicious", method = RequestMethod.GET, produces = "application/json")
+    public List<SuspiciousEvent> getSuspiciousEvents() {
+        this.allRequests.increment();
+        this.getRequests.increment();
+        return userService.getSuspiciousEvents();
     }
 }

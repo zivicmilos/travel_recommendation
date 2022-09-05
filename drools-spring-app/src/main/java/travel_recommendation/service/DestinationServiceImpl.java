@@ -14,8 +14,6 @@ import travel_recommendation.repository.*;
 import travel_recommendation.service.interfaces.DestinationService;
 import travel_recommendation.service.interfaces.UserService;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,11 +24,9 @@ public class DestinationServiceImpl implements DestinationService {
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
     private final TravelRepository travelRepository;
+    private final SuspiciousEventRepository suspiciousEventRepository;
     private final KieContainer kieContainer;
     private final UserService userService;
-    private List<String> list = new ArrayList<>();
-    private List<DeletedTravel> deletedTravels = new ArrayList<>();
-    private List<LoginFailure> loginFailures = new ArrayList<>();
 
     @Override
     public List<Destination> getDestinationList(String username, TransportationType transportationType, double budget,
@@ -77,15 +73,15 @@ public class DestinationServiceImpl implements DestinationService {
 
     @Override
     public String like(LikeDto like) {
-        list = new ArrayList<>();
         Destination d = destinationRepository.findByCity(like.getDestination());
         Like newLike = likeRepository.save(new Like(userRepository.findByUsername(like.getUser()), d, like.getTime()));
 
-        cepRules();
+        String retVal = userService.cepRules();
 
-        if (!list.isEmpty() && list.get(0).equals("Too many likes within the hour")) {
+        if (retVal.startsWith("Too many likes for one destination within the hour")) {
             likeRepository.deleteById((newLike.getId()));
-            return list.get(0);
+            suspiciousEventRepository.save(new SuspiciousEvent(retVal));
+            return retVal;
         }
         return "Ok";
     }
@@ -106,60 +102,9 @@ public class DestinationServiceImpl implements DestinationService {
         user.addTravel(travel);
         userService.updateUserRank(user);
 
-        cepRules();
-    }
-
-    @Override
-    public void cepRules() {
-        KieSession kieSession = kieContainer.newKieSession();
-
-        for (User u : userRepository.findAll()) {
-            kieSession.insert(u);
+        String retVal = userService.cepRules();
+        if (!retVal.equals("")) {
+            suspiciousEventRepository.save(new SuspiciousEvent(retVal));
         }
-
-        for (Like l : likeRepository.findAll()) {
-            kieSession.insert(l);
-        }
-
-        for (Travel t : travelRepository.findAll()) {
-            kieSession.insert(t);
-        }
-
-        for (DeletedTravel dt : this.deletedTravels) {
-            kieSession.insert(dt);
-        }
-
-        for (LoginFailure lf : this.loginFailures) {
-            kieSession.insert(lf);
-        }
-
-        kieSession.setGlobal( "myGlobalList", list );
-
-        kieSession.getAgenda().getAgendaGroup("check_likes").setFocus();
-        kieSession.fireAllRules();
-        kieSession.dispose();
-    }
-
-    public void addDeletedTravel(DeletedTravel deletedTravel) {
-        this.deletedTravels.add(deletedTravel);
-    }
-
-    public List<DeletedTravel> getDeletedTravels() {
-        return this.deletedTravels;
-    }
-
-    public void setDeletedTravels(List<DeletedTravel> deletedTravels) {
-        this.deletedTravels = deletedTravels;
-    }
-
-    public void addLoginFailure(LoginFailure loginFailure) {
-        this.loginFailures.add(loginFailure);
-    }
-    public List<LoginFailure> getLoginFailures() {
-        return loginFailures;
-    }
-
-    public void setLoginFailures(List<LoginFailure> loginFailures) {
-        this.loginFailures = loginFailures;
     }
 }

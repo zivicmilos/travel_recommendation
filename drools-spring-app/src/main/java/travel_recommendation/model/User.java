@@ -57,7 +57,6 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-    //@JsonManagedReference
     private List<Travel> travels;
 
     @Transient
@@ -68,8 +67,6 @@ public class User implements UserDetails {
 
     @Transient
     private double sumSpent;
-    private Date loginBlocked;
-    private Date reservationBlocked;
 
     public User(String name, String lastname, String username, String password, String email, LocalDate dateOfBirth,
                 Status status, Location location) {
@@ -86,8 +83,6 @@ public class User implements UserDetails {
         this.userParameters = new UserParameters();
         this.averageSpent = 0;
         this.sumSpent = 0;
-        this.loginBlocked = new Date(2021, 5,5);
-        this.reservationBlocked =  new Date(2021, 5,5);
     }
 
     public void addTravel(Travel travel) {

@@ -10,9 +10,13 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import travel_recommendation.dto.RegisterUserDto;
+import travel_recommendation.model.LoginFailure;
 import travel_recommendation.model.Role;
+import travel_recommendation.model.SuspiciousEvent;
 import travel_recommendation.model.User;
+import travel_recommendation.repository.LoginFailureRepository;
 import travel_recommendation.repository.RoleRepository;
+import travel_recommendation.repository.SuspiciousEventRepository;
 import travel_recommendation.repository.UserRepository;
 import travel_recommendation.security.TokenManager;
 import travel_recommendation.security.model.JwtRequest;
@@ -20,6 +24,7 @@ import travel_recommendation.security.model.JwtResponse;
 import travel_recommendation.service.interfaces.AuthenticationService;
 import travel_recommendation.service.interfaces.UserService;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +37,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final LoginFailureRepository loginFailureRepository;
+    private final SuspiciousEventRepository suspiciousEventRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -41,6 +48,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            loginFailureRepository.save(new LoginFailure(userRepository.findByUsername(request.getUsername()), LocalDateTime.now()));
+            String retVal = userService.cepRules();
+            if (!retVal.equals("")) {
+                suspiciousEventRepository.save(new SuspiciousEvent(retVal));
+            }
             throw new Exception("INVALID_CREDENTIALS", e);
         }
 

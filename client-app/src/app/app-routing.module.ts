@@ -6,6 +6,7 @@ import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ReservationComponent } from './components/reservation/reservation.component';
+import { SuspiciousEventsComponent } from './components/suspicious-events/suspicious-events.component';
 import { TravelComponent } from './components/travel/travel.component';
 
 const routes: Routes = [
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'reservation', component: ReservationComponent },
   { path: 'travel', component: TravelComponent },
   { path: 'admin', component: AdminComponent },
+  { path: 'suspicious_event', component: SuspiciousEventsComponent },
   { path: '', component: LoginComponent },
   { path: '**', component: PageNotFoundComponent },
   { path: 'navbar', component: NavbarComponent }

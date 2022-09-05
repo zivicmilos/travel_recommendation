@@ -36,6 +36,10 @@ export class UserService {
     return this.http.post(this.baseUrl + '/travel/cancel', travel, { headers: this.headers });
   }
 
+  getSuspiciousEvents() {
+    return this.http.get(this.baseUrl + '/suspicious', { headers: this.headers });
+  }
+
   setCurrentUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
   }

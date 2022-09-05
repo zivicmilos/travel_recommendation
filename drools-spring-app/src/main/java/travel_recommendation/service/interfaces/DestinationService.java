@@ -17,5 +17,4 @@ public interface DestinationService {
 
     void reserve(TravelDto travelDto);
 
-    void cepRules();
 }

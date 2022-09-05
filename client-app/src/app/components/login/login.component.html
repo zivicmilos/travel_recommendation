@@ -114,7 +114,7 @@
                                             <div *ngIf="apiLoaded | async">
                                                 <google-map width="470px" [center]="center"
                                                     (mapClick)="eventHandler($event,'mapClick')">
-                                                    <map-marker #markerElem="mapMarker" [position]="marker.position"
+                                                    <map-marker *ngIf="marker" #markerElem="mapMarker" [position]="marker.position"
                                                         [options]="marker.options">
                                                     </map-marker>
                                                 </google-map>

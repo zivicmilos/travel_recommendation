@@ -14,6 +14,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { CommonModule } from '@angular/common';
+import { SuspiciousEventsComponent } from './components/suspicious-events/suspicious-events.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CommonModule } from '@angular/common';
     LoginComponent,
     AdminComponent,
     NavbarComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    SuspiciousEventsComponent
   ],
   imports: [
     BrowserModule,

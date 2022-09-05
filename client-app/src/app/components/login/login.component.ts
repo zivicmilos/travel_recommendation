@@ -35,6 +35,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.userService.getCurrentUser() !== null) {
+      if (this.userService.getCurrentUser().roles[0].name === 'ROLE_ADMIN')
+        this.router.navigate(['/admin']);
+      else
+        this.router.navigate(['/home']);
+    }
     navigator.geolocation.getCurrentPosition((position) => {
       this.center = {
         lat: position.coords.latitude,

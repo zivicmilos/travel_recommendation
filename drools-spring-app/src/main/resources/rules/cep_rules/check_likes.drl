@@ -63,7 +63,7 @@ rule "More than 5 likes in an hour from one user"
     then
         System.out.println("Too many likes for one destination: " + $uId + ", " + $dId);
         insert(new SuspiciousLikeEvent($uId, $dId, "Too many likes for one destination"));
-        myGlobalList.add( "Too many likes within the hour");
+        myGlobalList.add("Too many likes for one destination within the hour, User " + $uId + ", Destination: " + $dId);
 
 end
 
@@ -78,7 +78,7 @@ rule "More than 3 travel reservations in an hour from one user"
                 this != $t1,
                 user.username == $uId,
                 destination.location.city == $dId,
-                this meets[5m] $t1
+                this meets[1h] $t1
             ),
             count($t2)
         )
@@ -86,7 +86,7 @@ rule "More than 3 travel reservations in an hour from one user"
     then
         System.out.println("Too many travel reservations for one destination: " + $uId + ", " + $dId);
         insert(new SuspiciousReservationEvent($uId, $dId, "Too many travel reservations for one destination"));
-        //myGlobalList.add( "Too many travel reservations within the hour");
+        myGlobalList.add( "Too many travel reservations within the hour, User: " + $uId + ", Destination: " + $dId);
 
 end
 
@@ -102,7 +102,7 @@ rule "More than 1 reserve and cancel in an hour from one user"
                 user.username == $uId,
                 destination.location.city == $dId,
                 travelDate == $td,
-                this meets[5m] $t1
+                this meets[1h] $t1
             ),
             count($t2)
         )
@@ -110,7 +110,7 @@ rule "More than 1 reserve and cancel in an hour from one user"
     then
         System.out.println("Reserved and canceled more than once: " + $uId + ", " + $dId);
         insert(new ReserveCancelEvent($uId, $dId, "Reserved and canceled more than once"));
-        //myGlobalList.add( "Reserved and canceled more than once");
+        myGlobalList.add("Reserved and canceled more than once, User: " + $uId + ", Destination: " + $dId);
 
 end
 
@@ -125,7 +125,7 @@ rule "More than 5 failed logins in an hour from one user"
             $t2: LoginFailure(
                 this != $t1,
                 user.username == $uId,
-                this meets[5m] $t1
+                this meets[1h] $t1
             ),
             count($t2)
         )
@@ -133,25 +133,5 @@ rule "More than 5 failed logins in an hour from one user"
     then
         System.out.println("Failed to log in more than 5 times: " + $uId);
         insert(new LoginFailureEvent($uId, "Failed to log in more than 5 times"));
-        modify($user){setLoginBlocked(new Date())}
-        //myGlobalList.add( "Failed to log in more than 5 times");
+        myGlobalList.add("Failed to log in more than 5 times, User: " + $uId + ", Date: " + $t1.getFailureDate());
 end
-
-/*rule "More than 3 failed logins events in an hour from one user"
-    salience 1
-    agenda-group "check_likes"
-    lock-on-active
-    when
-        $user: User($u: username)
-        //LoginFailureEvent($uId: username)
-        //not (LoginBlockEvent(username == $uId))
-        Number(intValue >= 0) from accumulate(
-            $s: LoginFailureEvent(username == $u),
-            count($s)
-        )
-    then
-        //System.out.println("More than 3 failed logins events: " + $uId);
-        //insert(new LoginBlockEvent($uId));
-        modify($user){setLoginBlocked(new Date())}
-        //myGlobalList.add( "Failed to log in more than 5 times");
-end*/

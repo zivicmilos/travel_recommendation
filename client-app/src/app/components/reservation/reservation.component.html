@@ -15,58 +15,66 @@
         <p style="float: left; margin-right: 20px;"><img src="../../../assets/images/{{destination.location.city}}.jpg"
                 height="250px" width="350px"></p>
         <div>
-            <h4>{{destination.location.city}}</h4>
+            <h3>{{destination.location.city}}</h3>
             <label>Location: &nbsp;</label>
-            <label>{{destination.location.country}}&nbsp;&nbsp;</label>
+            <label>{{destination.location.country}},&nbsp;&nbsp;</label>
             <label>{{destination.location.continent}}&nbsp;&nbsp;</label>
-            <label>{{destination.location.coordinates.latitude}}&nbsp;&nbsp;</label>
-            <label>{{destination.location.coordinates.longitude}}&nbsp;&nbsp;</label>
-            <br>
-            <label>Transportation Types: &nbsp;</label>
-            <label *ngFor="let tt of destination.transportationTypes">{{tt}}&nbsp;&nbsp;</label>
             <br>
             <label>Destination Types: &nbsp;</label>
-            <label *ngFor="let dt of destination.destinationTypes">{{dt}}&nbsp;&nbsp;</label>
+            <label *ngFor="let dt of destination.destinationTypes">{{capitalize(dt)}}&nbsp;&nbsp;</label>
+            <br>
+            <label>Transportation Types: &nbsp;</label>
+            <ng-container *ngFor="let tt of destination.transportationTypes">
+                <span *ngIf="tt=='CAR'" class="badge rounded-pill bg-primary"><img
+                        src="../../../assets/app-icons/car.svg"></span>
+                <span *ngIf="tt=='BUS'" class="badge rounded-pill bg-success"><img
+                        src="../../../assets/app-icons/bus.svg"></span>
+                <span *ngIf="tt=='TRAIN'" class="badge rounded-pill bg-secondary"><img
+                        src="../../../assets/app-icons/train.svg"></span>
+                <span *ngIf="tt=='PLANE'" class="badge rounded-pill bg-info"><img
+                        src="../../../assets/app-icons/plane.svg"></span>
+            </ng-container>
             <br>
             <label>Weather: &nbsp;</label>
-            <label>{{destination.weather}}</label>
+            <span *ngIf="destination.weather=='NEUTRAL'"
+                class="badge rounded-pill bg-secondary">{{capitalize(destination.weather)}}</span>
+            <span *ngIf="destination.weather=='COLD'"
+                class="badge rounded-pill bg-info">{{capitalize(destination.weather)}}</span>
+            <span *ngIf="destination.weather=='WARM'"
+                class="badge rounded-pill bg-danger">{{capitalize(destination.weather)}}</span>
             <br>
             <label>Recommended Transportation Type: &nbsp;</label>
-            <label>{{destination.recommendedTransportationType}}</label>
+            <span *ngIf="destination.recommendedTransportationType=='CAR'" class="badge rounded-pill bg-danger"><img
+                    src="../../../assets/app-icons/car.svg"></span>
+            <span *ngIf="destination.recommendedTransportationType=='BUS'" class="badge rounded-pill bg-success"><img
+                    src="../../../assets/app-icons/bus.svg"></span>
+            <span *ngIf="destination.recommendedTransportationType=='TRAIN'" class="badge rounded-pill bg-primary"><img
+                    src="../../../assets/app-icons/train.svg"></span>
+            <span *ngIf="destination.recommendedTransportationType=='PLANE'" class="badge rounded-pill bg-info"><img
+                    src="../../../assets/app-icons/plane.svg"></span>
             <br>
-            <label>Grade: &nbsp;</label>
             <label>{{destination.grade | number : '1.0-2'}}&nbsp;&nbsp;</label>
+            <img class="mb-2" src="../../../assets/app-icons/star.svg" alt="">
+            &nbsp;&nbsp;
             <label>Cost: &nbsp;</label>
             <label>{{destination.cost | number : '1.0-0'}}&euro;&nbsp;&nbsp;</label>
-            <label>Likes: &nbsp;</label>
-            <label>{{destination.likes.length}}&nbsp;</label>
             <br>
-            <label>Score: &nbsp;</label>
-            <label>{{destination.score | number : '1.0-0'}}&nbsp;</label>
+            <label>{{destination.likes.length}}</label>&nbsp;&nbsp;
+            <img class="mb-2" src="../../../assets/app-icons/like.svg" alt="">
         </div>
     </div>
     <br><br><br><br><br>
     <div class="container">
         <div class="row">
             <div class="col-sm">
-                <label>Travel date</label>
+                <input type="date" name="travelDate" class="form-control mb-2 mr-sm-2" id="travelDate"
+                    [(ngModel)]="travelDate">
             </div>
             <div class="col-sm">
-                <label>Transportation type</label>
-            </div>
-            <div class="col-sm">
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm">
-                <input type="date" name="travelDate" id="travelDate" [(ngModel)]="travelDate">
-            </div>
-            <div class="col-sm">
-                <select name="transportationType" id="transportationType" [(ngModel)]="transportationType">
-                    <option *ngFor="let tt of destination.transportationTypes" 
-                        [value]="tt">
+                <select name="transportationType" id="transportationType" class="form-control mb-2 mr-sm-2"
+                    [(ngModel)]="transportationType">
+                    <option value="" disabled selected>Select transport type</option>
+                    <option *ngFor="let tt of destination.transportationTypes" [value]="tt">
                         {{tt | titlecase}}
                     </option>
                 </select>

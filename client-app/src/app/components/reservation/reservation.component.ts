@@ -19,7 +19,7 @@ export class ReservationComponent implements OnInit {
   constructor(private destinationService: DestinationService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.destination = history.state.data;
+    this.destination = history.state.data || JSON.parse(localStorage.getItem('destination') || '');
   }
 
   reserve() {
@@ -39,6 +39,11 @@ export class ReservationComponent implements OnInit {
         );
       }
     );
+  }
+
+  capitalize(s: string) {
+    s = s.toLowerCase();
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 
 }

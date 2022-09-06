@@ -1,1 +1,19 @@
-<p *ngFor="let susEvent of suspiciousEvents">{{ susEvent.description }}</p>
+<div class="container mt-5">
+    <h2>Suspicious Events</h2>
+    <br><br>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Suspicious Event</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let susEvent of suspiciousEvents; let i = index" [attr.data-index]="i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>{{ susEvent.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

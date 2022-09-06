@@ -13,21 +13,28 @@ import { UserService } from 'src/app/services/user-service/user.service';
 })
 export class HomeComponent implements OnInit {
   currentUser: User = new User;
-  transportationType: String = 'PLANE';
+  transportationType: string = '';
+  budget: number = NaN;
+  destinationType: string = '';
+  weather: string = '';
+  continent: string = '';
+  /*transportationType: String = 'PLANE';
   budget: Number = 400;
   destinationType: String = 'PARTY';
   weather: String = "WARM";
-  continent: String = 'Europe';
-  destinations : Destination[] = [];
+  continent: String = 'Europe';*/
+  destinations: Destination[] = [];
   constructor(private destinationService: DestinationService, private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    /*this.userService.getUserByUsername().subscribe(
-      (data: any) => {
-        this.userService.setCurrentUser(data);
-        this.currentUser = data;
-      });*/
     this.currentUser = this.userService.getCurrentUser();
+    this.transportationType = localStorage.getItem('transportationType') || '';
+    this.destinationType = localStorage.getItem('destinationType') || '';
+    this.weather = localStorage.getItem('weather') || '';
+    this.continent = localStorage.getItem('continent') || '';
+    this.budget = Number(localStorage.getItem('budget') || NaN);
+    if (this.transportationType !== '')
+      this.findDestinations();
   }
 
   findDestinations() {
@@ -35,28 +42,39 @@ export class HomeComponent implements OnInit {
       this.weather, this.continent).subscribe(
         (data: any) => {
           this.destinations = data;
+          localStorage.setItem('transportationType', this.transportationType);
+          localStorage.setItem('budget', this.budget.toString());
+          localStorage.setItem('destinationType', this.destinationType);
+          localStorage.setItem('weather', this.weather);
+          localStorage.setItem('continent', this.continent);
         }
       );
   }
 
   like(destination: String) {
     let date: Date = new Date();
-    date.setHours(date.getHours()+2);
+    date.setHours(date.getHours() + 2);
     let like: Like = new Like(this.currentUser.username, destination, date);
     this.destinationService.like(like).subscribe(
       (data: any) => {
-       if (data === 'Ok') {
-        this.destinations.find(d => d.location.city === destination)?.likes.push(like);
-       }
+        if (data === 'Ok') {
+          this.destinations.find(d => d.location.city === destination)?.likes.push(like);
+        }
       }
     );
   }
 
   reserve(destination: Destination) {
-    this.router.navigate(['/reservation'], {state: { data: destination}});
+    this.router.navigate(['/reservation'], { state: { data: destination } });
+    localStorage.setItem('destination', JSON.stringify(destination));
   }
 
   myTravels() {
     this.router.navigate(['/travel']);
+  }
+
+  capitalize(s: string) {
+    s = s.toLowerCase();
+    return s.charAt(0).toUpperCase() + s.slice(1);
   }
 }

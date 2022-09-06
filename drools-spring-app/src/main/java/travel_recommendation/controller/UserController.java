@@ -36,7 +36,8 @@ public class UserController {
                 .description("Number of all HTTP requests for server endpoints")
                 .register(registry);
     }
-
+    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/all" +
             "", method = RequestMethod.GET, produces = "application/json")
     public List<User> getUsers() {
@@ -59,6 +60,7 @@ public class UserController {
         return userService.getTravelsByUsername(user.getName());
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENT')")
     @RequestMapping(value = "/travel/cancel", method = RequestMethod.POST, consumes = "application/json")
     public void cancelTravel(@RequestBody TravelDto travelDto) {
         this.allRequests.increment();

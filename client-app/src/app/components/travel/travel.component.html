@@ -12,29 +12,40 @@
     <div class="container mt-5">
         <h2>My Travels</h2>
         <br><br>
+
+        <div *ngIf="!travels.length" class="h-100 d-flex align-items-center justify-content-center mt-5">
+            <h4>You still don't have any travels, but you can go to Home tab and reserve one :)</h4>
+        </div>
+
         <div *ngFor="let t of travels">
-            <p style="float: left; margin-right: 20px;"><img src="../../../assets/images/{{t.destination.location.city}}.jpg"
-                    height="150px" width="240px"></p>
+            <p style="float: left; margin-right: 20px;"><img
+                    src="../../../assets/images/{{t.destination.location.city}}.jpg" height="150px" width="240px"></p>
             <div>
                 <h4>{{t.destination.location.city}}</h4>
                 <label>Location: &nbsp;</label>
-                <label>{{t.destination.location.country}}&nbsp;&nbsp;</label>
+                <label>{{t.destination.location.country}},&nbsp;&nbsp;</label>
                 <label>{{t.destination.location.continent}}&nbsp;&nbsp;</label>
-                <label>{{t.destination.location.coordinates.latitude}}&nbsp;&nbsp;</label>
-                <label>{{t.destination.location.coordinates.longitude}}&nbsp;&nbsp;</label>
                 <br>
                 <label>Transportation Type: &nbsp;</label>
-                <label>{{t.transportationType}}&nbsp;&nbsp;</label>
+                <span *ngIf="t.transportationType=='CAR'" class="badge rounded-pill bg-danger"><img
+                        src="../../../assets/app-icons/car.svg"></span>
+                <span *ngIf="t.transportationType=='BUS'" class="badge rounded-pill bg-success"><img
+                        src="../../../assets/app-icons/bus.svg"></span>
+                <span *ngIf="t.transportationType=='TRAIN'" class="badge rounded-pill bg-primary"><img
+                        src="../../../assets/app-icons/train.svg"></span>
+                <span *ngIf="t.transportationType=='PLANE'" class="badge rounded-pill bg-info"><img
+                        src="../../../assets/app-icons/plane.svg"></span>
                 <br>
                 <label>Travel Date: &nbsp;</label>
                 <label>{{t.travelDate | date: 'd MMMM, yyyy'}}&nbsp;&nbsp;</label>
                 <br>
-                <label>Grade: &nbsp;</label>
                 <label>{{t.grade | number : '1.0-2'}}&nbsp;&nbsp;</label>
+                <img class="mb-2" src="../../../assets/app-icons/star.svg" alt="">
+                &nbsp;&nbsp;
                 <label>Cost: &nbsp;</label>
                 <label>{{t.cost | number : '1.0-0'}}&euro;&nbsp;&nbsp;</label>
-                <button *ngIf="isGreatherThanToday(t.travelDate)" type="button" class="btn btn-danger btn-block mb-4 mx-5" (click)="cancel(t)">Cancel</button>
-                <!-- <button type="button" class="btn btn-primary btn-block mb-4 mx-5" (click)="reserve(d)">Reserve</button> -->
+                <button *ngIf="isGreatherThanToday(t.travelDate)" type="button"
+                    class="btn btn-danger btn-block mb-4 mx-5" (click)="cancel(t)">Cancel</button>
             </div>
             <br><br>
             <hr>

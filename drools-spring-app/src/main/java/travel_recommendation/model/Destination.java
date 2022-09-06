@@ -21,6 +21,8 @@ public class Destination {
     @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "weather")
     private Weather weather;
 
     @ElementCollection(targetClass = DestinationType.class)

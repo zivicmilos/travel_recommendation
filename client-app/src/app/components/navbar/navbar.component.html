@@ -36,7 +36,7 @@
                         <a class="nav-link" href="/travel">My Travels</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="/profile">Profile</a>
                     </li>
                 </ul>
             </div>
@@ -50,11 +50,16 @@
                         <a class="nav-link" href="/suspicious_event">Suspicious events</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="/profile">Profile</a>
                     </li>
                 </ul>
             </div>
 
+            <span *ngIf="!isAdmin && user.userRank=='PLATINUM'" class="badge bg-platinum"><h6 class="mt-1">{{ user.userRank | titlecase }} User</h6></span> &nbsp;&nbsp;&nbsp;&nbsp;
+            <span *ngIf="!isAdmin && user.userRank=='GOLD'" class="badge bg-gold"><h6 class="mt-1">{{ user.userRank | titlecase }} User</h6></span> &nbsp;&nbsp;&nbsp;&nbsp;
+            <span *ngIf="!isAdmin && user.userRank=='SILVER'" class="badge bg-silver"><h6 class="mt-1">{{ user.userRank | titlecase }} User</h6></span> &nbsp;&nbsp;&nbsp;&nbsp;
+            <span *ngIf="!isAdmin && user.userRank=='BRONZE'" class="badge bg-bronze"><h6 class="mt-1">{{ user.userRank | titlecase }} User</h6></span> &nbsp;&nbsp;&nbsp;&nbsp;
+            <span *ngIf="!isAdmin && user.userRank=='REGULAR'" class="badge bg-regular"><h6 class="mt-1">{{ user.userRank | titlecase }} User</h6></span> &nbsp;&nbsp;&nbsp;&nbsp;
             <button *ngIf="isAuthenticated" class="btn btn-outline-primary my-2 my-sm-0" type="submit"
                 (click)="logOut()">Log Out</button>
 

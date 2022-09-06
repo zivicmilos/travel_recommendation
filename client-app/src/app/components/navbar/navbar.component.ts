@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { User } from 'src/app/model/user-model';
 import { UserService } from 'src/app/services/user-service/user.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { UserService } from 'src/app/services/user-service/user.service';
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean = false;
   isAdmin: boolean = false;
+  user: User = new User();
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -37,6 +39,7 @@ export class NavbarComponent implements OnInit {
     if (this.userService.getCurrentUser() !== null) {
       this.isAuthenticated = true;
       this.checkIsAdmin();
+      this.user = this.userService.getCurrentUser();
     }
     else {
       this.isAuthenticated = false;

@@ -4,9 +4,11 @@ export class User {
         public lastname: string = '',
         public username: string = '',
         public password: string = '',
-        public loginBlocked: Date = new Date(),
-        public reservationBlocked: Date = new Date(),
+        public email: string = '',
+        public dateOfBirth: Date = new Date(),
         public userRank: string = '',
-        public role: string = ''
+        public role: string = '',
+        public averageSpent: number = 0,
+        public sumSpent: number = 0
     ) { }
 }

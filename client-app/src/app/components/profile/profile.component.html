@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Profile</h2>
+        <br><br>
+        <div class="row">
+            <div class="col-sm-4">
+                <label class="form-label" for="name">Name:</label>
+                <input type="text" name="name" class="form-control mb-2 mr-sm-2" id="name" [(ngModel)]="user.name"
+                    disabled>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label" for="lastname">Lastname:</label>
+                <input type="text" name="lastname" class="form-control mb-2 mr-sm-2" id="lastname"
+                    [(ngModel)]="user.lastname" disabled>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-4">
+                <label class="form-label" for="username">Username:</label>
+                <input type="text" name="username" class="form-control mb-2 mr-sm-2" id="username"
+                    [(ngModel)]="user.username" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label" for="email">Email:</label>
+                <input type="text" name="email" class="form-control mb-2 mr-sm-2" id="email" [(ngModel)]="user.email"
+                    disabled>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-4">
+                <label class="form-label" for="birthDate">Birth Date:</label>
+                <input type="date" name="birthDate" class="form-control mb-2 mr-sm-2" id="birthDate"
+                    [(ngModel)]="user.dateOfBirth" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label" for="averageSpent">Average Spent:</label>
+                <input type="number" name="averageSpent" class="form-control mb-2 mr-sm-2" id="averageSpent"
+                    [(ngModel)]="user.averageSpent" disabled>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-4">
+                <label class="form-label" for="averageSpent">Sum Spent:</label>
+                <input type="number" name="sumSpent" class="form-control mb-2 mr-sm-2" id="sumSpent"
+                    [(ngModel)]="user.sumSpent" disabled>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

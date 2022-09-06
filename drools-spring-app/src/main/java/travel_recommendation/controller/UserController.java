@@ -36,10 +36,9 @@ public class UserController {
                 .description("Number of all HTTP requests for server endpoints")
                 .register(registry);
     }
-    
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/all" +
-            "", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/all", method = RequestMethod.GET, produces = "application/json")
     public List<User> getUsers() {
         this.allRequests.increment();
         this.getRequests.increment();

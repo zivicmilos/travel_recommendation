@@ -2,7 +2,10 @@
     <h2>Suspicious Events</h2>
     <br><br>
 
-    <table class="table">
+    <div *ngIf="!suspiciousEvents.length" class="h-100 d-flex align-items-center justify-content-center mt-5">
+        <h3>There is no suspicious events right now and we hope that this state will remain the same.</h3>
+    </div>
+    <table *ngIf="suspiciousEvents.length" class="table">
         <thead>
             <tr>
                 <th scope="col">#</th>

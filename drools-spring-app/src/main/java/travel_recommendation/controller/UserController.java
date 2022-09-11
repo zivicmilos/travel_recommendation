@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/user")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = {"http://localhost:4200", "https://pantravel.herokuapp.com/"}, maxAge = 3600)
 public class UserController {
     private final UserService userService;
     private final Counter getRequests;

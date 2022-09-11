@@ -188,6 +188,4 @@ e2e/*.map
 # System Files
 .DS_Store/
 
-client-app/src/config.ts
-
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,intellij

@@ -31,7 +31,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        KieSession kieSession = kieContainer.newKieSession();
+        kieSession.insert(user);
+        kieSession.getAgenda().getAgendaGroup("user_activity_rules").setFocus();
+        kieSession.fireAllRules();
+        kieSession.dispose();
+        return user;
     }
 
     @Override

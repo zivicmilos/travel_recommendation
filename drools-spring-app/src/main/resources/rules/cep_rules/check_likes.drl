@@ -119,8 +119,7 @@ rule "More than 5 failed logins in an hour from one user"
     agenda-group "check_likes"
     lock-on-active
     when
-        $user: User($u: username)
-        $t1: LoginFailure($uId: user.username, $u == user.username)
+        $t1: LoginFailure($uId: user.username)
         Number(intValue >= 5) from accumulate(
             $t2: LoginFailure(
                 this != $t1,

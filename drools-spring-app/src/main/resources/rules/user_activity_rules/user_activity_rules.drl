@@ -40,7 +40,6 @@ rule "Average money spent for user"
     lock-on-active
     when
         $u: User($travelHistory: travels)
-        $d: Destination($u.username == username)
         $avg: Number() from accumulate(
             Travel($cost: cost) from $travelHistory,
             average($cost)
@@ -55,7 +54,6 @@ rule "Sum of money spent for user"
     lock-on-active
     when
         $u: User($travelHistory: travels)
-        $d: Destination($u.username == username)
         $sum: Number() from accumulate(
             Travel($cost: cost) from $travelHistory,
             sum($cost)

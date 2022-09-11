@@ -44,14 +44,14 @@
                 <input type="date" name="birthDate" class="form-control mb-2 mr-sm-2" id="birthDate"
                     [(ngModel)]="user.dateOfBirth" disabled>
             </div>
-            <div class="col-sm-4">
+            <div *ngIf="u.roles[0].name === 'ROLE_CLIENT'" class="col-sm-4">
                 <label class="form-label" for="averageSpent">Average Spent:</label>
                 <input type="number" name="averageSpent" class="form-control mb-2 mr-sm-2" id="averageSpent"
                     [(ngModel)]="user.averageSpent" disabled>
             </div>
         </div>
         <br>
-        <div class="row">
+        <div *ngIf="u.roles[0].name === 'ROLE_CLIENT'" class="row">
             <div class="col-sm-4">
                 <label class="form-label" for="averageSpent">Sum Spent:</label>
                 <input type="number" name="sumSpent" class="form-control mb-2 mr-sm-2" id="sumSpent"

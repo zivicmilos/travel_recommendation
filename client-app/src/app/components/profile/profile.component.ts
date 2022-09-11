@@ -9,6 +9,7 @@ import { UserService } from 'src/app/services/user-service/user.service';
 })
 export class ProfileComponent implements OnInit {
   user: User = new User();
+  u: any = this.userService.getCurrentUser();
 
   constructor(private userService: UserService) { }
 

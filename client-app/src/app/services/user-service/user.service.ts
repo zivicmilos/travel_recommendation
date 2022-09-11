@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TravelDto } from 'src/app/dto/travel-dto';
+import { environment } from 'src/environments/environment';
 import { Travel } from '../../model/travel-model';
 import { User } from '../../model/user-model';
 
@@ -9,7 +10,7 @@ import { User } from '../../model/user-model';
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl: string = 'http://localhost:8080/user';
+  baseUrl: string = environment.appUrl + 'user';
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage['jwt']}`

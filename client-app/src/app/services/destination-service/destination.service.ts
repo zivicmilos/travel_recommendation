@@ -4,12 +4,13 @@ import { Like } from '../../model/like-model';
 import { Travel } from '../../model/travel-model';
 import {User} from '../../model/user-model';
 import { TravelDto } from 'src/app/dto/travel-dto';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DestinationService {
-  baseUrl: String = 'http://localhost:8080/destination';
+  baseUrl: String = environment.appUrl + 'destination';
   headers = new HttpHeaders({'Content-Type' : 'application/json',
                              'Authorization' : `Bearer ${localStorage['jwt']}`});
 

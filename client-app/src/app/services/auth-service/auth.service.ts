@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { retry } from 'rxjs';
 import { UserDto } from 'src/app/dto/user-dto';
+import { environment } from 'src/environments/environment';
 import { UserService } from '../user-service/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  baseUrl: String = 'http://localhost:8080/';
+  baseUrl: String = environment.appUrl;
 
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
